@@ -1,8 +1,9 @@
 /* @jsxImportSource solid-js */
 
-import { createEffect, createSignal, Show } from "solid-js";
-import { userSignal } from "../data/auth";
+import { createEffect, createSignal, onMount, Show } from "solid-js";
+import { initializeAuth } from "../data/auth";
 import { createSheet, findSheet, updateSheet } from "../data/firestore";
+import { userSignal } from "../data/signals";
 import type { Sheet } from "../data/types";
 import ChooseProfession from "./ChooseProfession";
 
@@ -15,6 +16,10 @@ export default function App() {
     if (!u) return;
     const sheet = await findSheet(u.uid);
     setSheet(sheet);
+  });
+
+  createEffect(() => {
+    console.log(user());
   });
 
   return (
@@ -30,7 +35,7 @@ export default function App() {
       }
     >
       <div>
-        <h1>{sheet()?.profession.name}</h1>
+        <h1 class="text-xl">{sheet()?.profession.name}</h1>
         <button
           class="btn btn-primary"
           onClick={async () => {

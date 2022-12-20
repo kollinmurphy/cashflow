@@ -1,7 +1,7 @@
 import * as fbAuth from "firebase/auth";
 import { auth as AuthUI } from "firebaseui";
-import { createSignal } from "solid-js";
 import firebaseApp from "./firebase";
+import { userSignal } from "./signals";
 
 const auth = fbAuth.getAuth(firebaseApp);
 const authUI = new AuthUI.AuthUI(auth);
@@ -16,9 +16,11 @@ export const mountAuthUI = (id: string) => {
 
 export const signOut = () => auth.signOut();
 
-export const userSignal = createSignal<fbAuth.User | null>(null);
 const [user, setUser] = userSignal;
 
 auth.onAuthStateChanged((u) => {
+  console.log("got user", u);
   setUser(u);
 });
+
+export const initializeAuth = () => {};

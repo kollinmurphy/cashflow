@@ -3,6 +3,7 @@
 import { For } from "solid-js";
 import { sheetSignal } from "../data/signals";
 import type { Expenses } from "../data/types";
+import Children from "./Children";
 
 export default function Expenses() {
   const [sheet] = sheetSignal;
@@ -15,7 +16,8 @@ export default function Expenses() {
         key,
         value: e[key as keyof Expenses],
       }))
-      .filter((e) => e.value !== 0);
+      .filter((e) => e.value !== 0)
+      .sort((a, b) => a.key.localeCompare(b.key));
   };
 
   return (
@@ -33,6 +35,7 @@ export default function Expenses() {
             </div>
           )}
         </For>
+        <Children />
       </div>
     </div>
   );

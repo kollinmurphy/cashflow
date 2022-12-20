@@ -51,6 +51,12 @@ export const createSheet = async (userId: string, profession: Profession) => {
       stocks: {} as any,
       liabilities: profession.liabilities,
       boat: false,
+      loans: 0,
+      leftRatRace: false,
+      postRatRace: {
+        cash: 0,
+        assets: [],
+      },
     },
     history: [],
   };

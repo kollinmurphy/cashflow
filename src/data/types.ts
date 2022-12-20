@@ -10,6 +10,14 @@ export type Sheet = {
     stocks: Record<StockName, StockAsset>;
     liabilities: Liabilities;
     boat: boolean;
+    loans: number;
+    children: number;
+    leftRatRace: boolean;
+    postRatRace: {
+      startingIncome: number;
+      cash: number;
+      assets: Asset[];
+    };
   };
   history: any[];
 };

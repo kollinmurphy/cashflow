@@ -1,10 +1,11 @@
 /* @jsxImportSource solid-js */
 
-import { For } from "solid-js";
+import { For, Show } from "solid-js";
 import { sheetSignal } from "../data/signals";
 import type { Liabilities } from "../data/types";
 import { Boat } from "./Boat";
 import Liability from "./Liability";
+import { Loans } from "./Loans";
 
 export default function Liabilities() {
   const [sheet] = sheetSignal;
@@ -17,7 +18,8 @@ export default function Liabilities() {
         key,
         value: l[key as keyof Liabilities],
       }))
-      .filter((l) => l.value !== 0);
+      .filter((l) => l.value !== 0)
+      .sort((a, b) => a.key.localeCompare(b.key));
   };
 
   return (
@@ -28,6 +30,9 @@ export default function Liabilities() {
         {(l, i) => <Liability key={l.key} value={l.value || 0} index={i()} />}
       </For>
       <Boat />
+      <Show when={(sheet()?.current.loans || 0) > 0}>
+        <Loans />
+      </Show>
     </div>
   );
 }

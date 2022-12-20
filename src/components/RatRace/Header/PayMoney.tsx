@@ -1,5 +1,6 @@
 /* @jsxImportSource solid-js */
 
+import { Icon } from "@iconify-icon/solid";
 import { createSignal } from "solid-js";
 import { updateSheet } from "../../../data/firestore";
 import { sheetSignal } from "../../../data/signals";
@@ -41,6 +42,7 @@ export default function PayMoney() {
         for="pay-money-modal"
         class="btn btn-error btn-outline w-full md:w-auto"
       >
+        <Icon icon="carbon:subtract" class="text-xl mr-1" />
         Pay Money
       </label>
       <input type="checkbox" id="pay-money-modal" class="modal-toggle" />

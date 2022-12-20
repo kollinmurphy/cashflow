@@ -1,5 +1,6 @@
 /* @jsxImportSource solid-js */
 
+import { Icon } from "@iconify-icon/solid";
 import { arrayUnion } from "firebase/firestore";
 import { createSignal, For } from "solid-js";
 import { updateSheet } from "../../../data/firestore";
@@ -65,7 +66,8 @@ export default function Stocks() {
       <div class="flex flex-row justify-between items-center">
         <h3 class="text-2xl font-bold">Stocks</h3>
         <label class="btn btn-primary" for="add-stock-modal">
-          Add Stock
+          <Icon icon="material-symbols:add" class="text-xl mr-1" />
+          Add
         </label>
       </div>
       <div class="divider" />

@@ -1,5 +1,6 @@
 /* @jsxImportSource solid-js */
 
+import { Icon } from "@iconify-icon/solid";
 import { arrayUnion } from "firebase/firestore";
 import { createSignal } from "solid-js";
 import { updateSheet } from "../../../data/firestore";
@@ -38,6 +39,7 @@ export default function TakeOutLoan() {
         for="take-load-modal"
         class="btn btn-info btn-outline w-full md:w-auto"
       >
+        <Icon icon="game-icons:two-coins" class="text-xl mr-1" />
         Take Loan
       </label>
       <input type="checkbox" id="take-load-modal" class="modal-toggle" />

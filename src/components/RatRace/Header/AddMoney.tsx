@@ -4,6 +4,7 @@ import { createSignal } from "solid-js";
 import { updateSheet } from "../../../data/firestore";
 import { sheetSignal } from "../../../data/signals";
 import ConditionalErrorAlert from "../../ConditionalErrorAlert";
+import {Icon} from '@iconify-icon/solid'
 
 export default function AddMoney() {
   const [sheet] = sheetSignal;
@@ -18,6 +19,7 @@ export default function AddMoney() {
         for="add-money-modal"
         class="btn btn-success btn-outline w-full md:w-auto"
       >
+        <Icon icon='material-symbols:add' class='text-xl mr-1' />
         Add Money
       </label>
       <input type="checkbox" id="add-money-modal" class="modal-toggle" />

@@ -1,10 +1,14 @@
 import confetti from "canvas-confetti";
 
-export default function createConfetti(options: { x: number; y: number }) {
+export default function createConfetti(options: {
+  x: number;
+  y: number;
+  startVelocity?: number;
+}) {
   confetti({
     particleCount: 100,
     spread: 360,
-    startVelocity: 15,
+    startVelocity: options.startVelocity || 15,
     gravity: 0.4,
     ticks: 100,
     origin: options,

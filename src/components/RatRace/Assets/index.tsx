@@ -1,8 +1,10 @@
 /* @jsxImportSource solid-js */
 
+import { Icon } from "@iconify-icon/solid";
 import { arrayUnion } from "firebase/firestore";
 import { createSignal, For, Match, Show, Switch } from "solid-js";
 import { v4 as uuid } from "uuid";
+import createConfetti from "../../../data/confetti";
 import { updateSheet } from "../../../data/firestore";
 import { sheetSignal } from "../../../data/signals";
 import type {
@@ -27,10 +29,10 @@ export default function Assets() {
 
   const resetForm = () => {
     setTimeout(() => {
-      costRef.value = "0";
+      if (costRef) costRef.value = "0";
       cashflowRef.value = "0";
       nameRef.value = "";
-      downpayRef.value = "0";
+      if (downpayRef) downpayRef.value = "0";
       setType(null);
     }, 150);
   };
@@ -38,12 +40,19 @@ export default function Assets() {
   const handleAdd = () => {
     const cost = parseInt(costRef.value);
     const cash = sheet()!.current.cash;
-    if (cost > cash)
+    if (cost > cash && type() === "other")
       return setError(
         `You don't have enough cash to buy this asset. You have $${cash} but this asset costs $${cost}`
       );
-    if (type() === "realEstate" && parseInt(downpayRef.value) > cost)
-      return setError(`You can't put down more money than the asset costs.`);
+    if (type() === "realEstate") {
+      if (parseInt(downpayRef.value) > cost)
+        return setError(`You can't put down more money than the asset costs.`);
+      if (parseInt(downpayRef.value) > cash)
+        return setError(
+          `You don't have enough cash to put down on this asset.`
+        );
+    }
+    const payment = type() === "realEstate" ? parseInt(downpayRef.value) : cost;
     const asset: AssetType =
       type() === "realEstate"
         ? ({
@@ -63,7 +72,7 @@ export default function Assets() {
             cashflow: parseInt(cashflowRef.value),
           } as OtherAsset);
     updateSheet(sheet()!.id, {
-      "current.cash": cash - cost,
+      "current.cash": cash - payment,
       "current.assets": arrayUnion(asset as AssetType),
       history: arrayUnion(
         `${new Date().toISOString()}: Bought asset ${nameRef.value} for $${
@@ -73,6 +82,8 @@ export default function Assets() {
     });
     closeRef.click();
     resetForm();
+    if (parseInt(cashflowRef.value) > 0)
+      createConfetti({ y: 0.5, x: 0.5, startVelocity: 40 });
   };
 
   return (
@@ -80,7 +91,8 @@ export default function Assets() {
       <div class="flex flex-row justify-between items-center">
         <h3 class="text-2xl font-bold">Assets</h3>
         <label class="btn btn-primary" for="add-asset-modal">
-          Add Asset
+          <Icon icon="material-symbols:add" class="text-xl mr-1" />
+          Add
         </label>
       </div>
       <div class="divider" />
@@ -104,12 +116,17 @@ export default function Assets() {
                     class="btn btn-secondary"
                     onClick={() => setType("realEstate")}
                   >
+                    <Icon
+                      icon="fluent:real-estate-20-filled"
+                      class="text-xl mr-1"
+                    />
                     Real Estate
                   </button>
                   <button
                     class="btn btn-secondary"
                     onClick={() => setType("other")}
                   >
+                    <Icon icon="ph:money" class="text-xl mr-1" />
                     Other
                   </button>
                 </div>

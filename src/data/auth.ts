@@ -19,7 +19,6 @@ export const signOut = () => auth.signOut();
 const [user, setUser] = userSignal;
 
 auth.onAuthStateChanged((u) => {
-  console.log("got user", u);
   setUser(u);
 });
 

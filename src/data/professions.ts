@@ -14,8 +14,8 @@ export const professions: Profession[] = [
       creditCards: 60,
       retail: 50,
       other: 300,
-      perChild: 70,
     },
+    perChild: 70,
     assets: {
       savings: 560,
     },
@@ -40,8 +40,8 @@ export const professions: Profession[] = [
       creditCards: 180,
       retail: 50,
       other: 1650,
-      perChild: 380,
     },
+    perChild: 380,
     assets: {
       savings: 400,
     },
@@ -66,8 +66,8 @@ export const professions: Profession[] = [
       creditCards: 60,
       retail: 50,
       other: 690,
-      perChild: 160,
     },
+    perChild: 160,
     assets: {
       savings: 520,
     },
@@ -92,8 +92,8 @@ export const professions: Profession[] = [
       creditCards: 60,
       retail: 50,
       other: 570,
-      perChild: 140,
     },
+    perChild: 140,
     assets: {
       savings: 710,
     },
@@ -104,5 +104,5 @@ export const professions: Profession[] = [
       creditCards: 2_000,
       retail: 1_000,
     },
-  }
+  },
 ];

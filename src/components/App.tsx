@@ -1,6 +1,7 @@
 /* @jsxImportSource solid-js */
 
 import { createEffect, Show } from "solid-js";
+import { signOut } from "../data/auth";
 import {
   createSheet,
   findSheet,
@@ -8,7 +9,11 @@ import {
   updateSheet,
 } from "../data/firestore";
 import { sheetSignal, userSignal } from "../data/signals";
-import { calculateExpenses, calculateMonthlyCashflow, calculatePassiveIncome } from "../data/utils";
+import {
+  calculateExpenses,
+  calculateMonthlyCashflow,
+  calculatePassiveIncome,
+} from "../data/utils";
 import Assets from "./Assets";
 import ChooseProfession from "./ChooseProfession";
 import Expenses from "./Expenses";
@@ -41,12 +46,23 @@ export default function App() {
     <Show
       when={sheet()}
       fallback={
-        <ChooseProfession
-          onChoose={async (p) => {
-            const sheet = await createSheet(user()!.uid, p);
-            listenToSheet(sheet.id, setSheet);
-          }}
-        />
+        <>
+          <ChooseProfession
+            onChoose={async (p) => {
+              const sheet = await createSheet(user()!.uid, p);
+              listenToSheet(sheet.id, setSheet);
+            }}
+          />
+          <button
+            class="btn btn-secondary mt-8"
+            onClick={() => {
+              signOut();
+              window.location.href = "/";
+            }}
+          >
+            Sign Out
+          </button>
+        </>
       }
     >
       <Show when={!sheet()?.current.leftRatRace} fallback={<OutOfRatRace />}>
@@ -59,7 +75,8 @@ export default function App() {
                   class="btn btn-primary"
                   onClick={() => {
                     const passiveIncome = calculatePassiveIncome(sheet());
-                    const monthly = Math.round(passiveIncome / 1000) * 1000 * 100;
+                    const monthly =
+                      Math.round(passiveIncome / 1000) * 1000 * 100;
                     updateSheet(sheet()!.id, {
                       "current.leftRatRace": true,
                       "current.postRatRace.startingIncome": monthly,

@@ -4,7 +4,48 @@ import Login from "../components/Login";
 import AuthenticatedRedirect from "../components/AuthenticatedRedirect";
 ---
 
-<Layout title="Welcome to Astro.">
+<style is:global>
+  .firebaseui-title {
+    @apply mb-2 font-bold text-xl;
+  }
+  .firebaseui-textfield {
+    @apply flex flex-row items-center;
+  }
+  .firebaseui-input {
+    @apply input input-bordered ml-4 w-full;
+  }
+  .firebaseui-input-invalid {
+    @apply input input-bordered ml-4 w-full;
+  }
+  .firebaseui-error {
+    @apply text-red-700 my-2 font-bold;
+  }
+  .firebaseui-button {
+    @apply btn btn-ghost;
+  }
+  .firebaseui-id-submit {
+    @apply btn btn-primary;
+  }
+  .firebaseui-link {
+    @apply btn btn-ghost;
+  }
+  .firebaseui-form-actions {
+    @apply flex flex-row gap-2 justify-end items-center mt-3;
+  }
+  .firebaseui-form-links {
+    @apply mt-3;
+  }
+  .firebaseui-text {
+    @apply text-gray-700 mb-2;
+  }
+  .firebaseui-card-actions {
+    @apply flex flex-row gap-2 justify-end items-center mt-3;
+  }
+  .firebaseui-container {
+    @apply max-w-sm mx-auto p-6 bg-white rounded-xl shadow-lg;
+  }
+</style>
+<Layout title="Cashflow">
   <Login client:only="solid-js" />
   <AuthenticatedRedirect client:only="solid-js" />
 </Layout>

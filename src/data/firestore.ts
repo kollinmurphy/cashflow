@@ -45,7 +45,7 @@ export const createSheet = async (userId: string, profession: Profession) => {
     profession,
     closed: false,
     current: {
-      cash: profession.income.salary,
+      cash: profession.income.salary + profession.assets.savings,
       expenses: profession.expenses,
       assets: [],
       stocks: {} as any,

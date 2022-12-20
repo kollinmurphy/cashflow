@@ -13,6 +13,25 @@ export default function TakeOutLoan() {
   let amountRef!: HTMLInputElement;
   let closeRef!: HTMLLabelElement;
 
+  const handleTakeLoan = () => {
+    const amount = parseInt(amountRef.value);
+    if (!amount || amount < 0)
+      return setError("Please enter a valid amount to add.");
+    if (amount % 1000 !== 0)
+      return setError("Amount must be a multiple of $1000.");
+    const cash = sheet()?.current.cash || 0;
+    const loans = sheet()?.current.loans || 0;
+    updateSheet(sheet()!.id, {
+      "current.cash": cash + amount,
+      "current.loans": loans + amount,
+      history: arrayUnion(`Took out a loan of $${amount} from the bank.`),
+    });
+    closeRef.click();
+    setTimeout(() => {
+      amountRef.value = "0";
+    }, 150);
+  };
+
   return (
     <>
       <label
@@ -43,27 +62,7 @@ export default function TakeOutLoan() {
             >
               Cancel
             </label>
-            <div
-              class="btn btn-primary"
-              onClick={() => {
-                const amount = parseInt(amountRef.value);
-                if (!amount || amount < 0)
-                  return setError("Please enter a valid amount to add.");
-                if (amount % 1000 !== 0)
-                  return setError("Amount must be a multiple of $1000.");
-                const cash = sheet()?.current.cash || 0;
-                const loans = sheet()?.current.loans || 0;
-                updateSheet(sheet()!.id, {
-                  "current.cash": cash + amount,
-                  "current.loans": loans + amount,
-                  history: arrayUnion(
-                    `Took out a loan of $${amount} from the bank.`
-                  ),
-                });
-                closeRef.click();
-                amountRef.value = "0";
-              }}
-            >
+            <div class="btn btn-primary" onClick={handleTakeLoan}>
               Take Loan
             </div>
           </div>

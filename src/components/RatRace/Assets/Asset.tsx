@@ -7,12 +7,12 @@ import type { Asset } from "../../../data/types";
 
 export default function Asset(props: { asset: Asset }) {
   const [sheet] = sheetSignal;
-  
+
   return (
     <div class="flex flex-row justify-between items-center p-4 bg-white shadow-lg rounded-lg">
       <div class="flex flex-col gap-1">
         <span class="font-bold">{props.asset.name}</span>
-        <span class="text-gray-400">
+        <span class="text-green-600">
           ${props.asset.cashflow.toLocaleString("en-us", { currency: "USD" })}
         </span>
       </div>

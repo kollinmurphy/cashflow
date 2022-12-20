@@ -1,7 +1,7 @@
 /* @jsxImportSource solid-js */
 
 import { arrayUnion } from "firebase/firestore";
-import { createSignal, For, Match, Switch } from "solid-js";
+import { createSignal, For, Match, Show, Switch } from "solid-js";
 import { v4 as uuid } from "uuid";
 import { updateSheet } from "../../../data/firestore";
 import { sheetSignal } from "../../../data/signals";
@@ -25,6 +25,16 @@ export default function Assets() {
   let downpayRef!: HTMLInputElement;
   let closeRef!: HTMLLabelElement;
 
+  const resetForm = () => {
+    setTimeout(() => {
+      costRef.value = "0";
+      cashflowRef.value = "0";
+      nameRef.value = "";
+      downpayRef.value = "0";
+      setType(null);
+    }, 150);
+  };
+
   const handleAdd = () => {
     const cost = parseInt(costRef.value);
     const cash = sheet()!.current.cash;
@@ -32,6 +42,8 @@ export default function Assets() {
       return setError(
         `You don't have enough cash to buy this asset. You have $${cash} but this asset costs $${cost}`
       );
+    if (type() === "realEstate" && parseInt(downpayRef.value) > cost)
+      return setError(`You can't put down more money than the asset costs.`);
     const asset: AssetType =
       type() === "realEstate"
         ? ({
@@ -60,11 +72,7 @@ export default function Assets() {
       ),
     });
     closeRef.click();
-    costRef.value = "0";
-    cashflowRef.value = "0";
-    nameRef.value = "";
-    downpayRef.value = "0";
-    setType(null);
+    resetForm();
   };
 
   return (
@@ -157,13 +165,15 @@ export default function Assets() {
               for="add-asset-modal"
               class="btn btn-primary btn-outline"
               ref={closeRef}
-              onClick={() => setType(null)}
+              onClick={resetForm}
             >
               Cancel
             </label>
-            <div class="btn btn-primary" onClick={handleAdd}>
-              Add
-            </div>
+            <Show when={type()}>
+              <div class="btn btn-primary" onClick={handleAdd}>
+                Add
+              </div>
+            </Show>
           </div>
         </div>
       </div>

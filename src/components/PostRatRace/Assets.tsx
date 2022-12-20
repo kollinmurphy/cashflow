@@ -5,7 +5,7 @@ import { createSignal, For } from "solid-js";
 import { v4 as uuid } from "uuid";
 import { updateSheet } from "../../data/firestore";
 import { sheetSignal } from "../../data/signals";
-import type { Asset } from "../../data/types";
+import type { Asset, OtherAsset } from "../../data/types";
 import ConditionalErrorAlert from "../ConditionalErrorAlert";
 
 export default function PostRatRaceAssets() {
@@ -17,6 +17,39 @@ export default function PostRatRaceAssets() {
   let amountRef!: HTMLInputElement;
   let costRef!: HTMLInputElement;
   let closeRef!: HTMLLabelElement;
+
+  const resetForm = () => {
+    setTimeout(() => {
+      costRef.value = "0";
+      amountRef.value = "0";
+      nameRef.value = "";
+      closeRef.click();
+    }, 150);
+  };
+
+  const handleAdd = () => {
+    const cost = parseInt(costRef.value);
+    const cash = sheet()!.current.postRatRace.cash;
+    if (cost > cash)
+      return setError(
+        `You don't have enough cash to buy this asset. You have $${cash} but this asset costs $${cost}`
+      );
+    updateSheet(sheet()!.id, {
+      "current.postRatRace.cash": cash - cost,
+      "current.postRatRace.assets": arrayUnion({
+        id: uuid(),
+        type: "other",
+        name: nameRef.value,
+        cashflow: Number(amountRef.value),
+      } as OtherAsset),
+      history: arrayUnion(
+        `${new Date().toISOString()}: Bought big asset ${nameRef.value} for $${
+          costRef.value
+        }`
+      ),
+    });
+    closeRef.click();
+  };
 
   return (
     <div class="border-2 border-black flex flex-col p-4 rounded-lg">
@@ -47,7 +80,7 @@ export default function PostRatRaceAssets() {
             >
               <div class="flex flex-col">
                 <span class="font-bold">{asset.name}</span>
-                <span class="text-gray-400">${asset.amount}</span>
+                <span class="text-gray-400">${asset.cashflow}</span>
               </div>
               <div class="flex flex-row gap-2">
                 <button
@@ -98,31 +131,7 @@ export default function PostRatRaceAssets() {
             >
               Cancel
             </label>
-            <div
-              class="btn btn-primary"
-              onClick={() => {
-                const cost = parseInt(costRef.value);
-                const cash = sheet()!.current.postRatRace.cash;
-                if (cost > cash)
-                  return setError(
-                    `You don't have enough cash to buy this asset. You have $${cash} but this asset costs $${cost}`
-                  );
-                updateSheet(sheet()!.id, {
-                  "current.postRatRace.cash": cash - cost,
-                  "current.postRatRace.assets": arrayUnion({
-                    id: uuid(),
-                    name: nameRef.value,
-                    amount: Number(amountRef.value),
-                  } as Asset),
-                  history: arrayUnion(
-                    `${new Date().toISOString()}: Bought big asset ${
-                      nameRef.value
-                    } for $${costRef.value}`
-                  ),
-                });
-                closeRef.click();
-              }}
-            >
+            <div class="btn btn-primary" onClick={handleAdd}>
               Add
             </div>
           </div>

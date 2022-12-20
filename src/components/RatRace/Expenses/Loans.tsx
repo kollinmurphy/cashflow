@@ -12,7 +12,7 @@ export default function Loans() {
     <Show when={amount() > 0}>
       <div class="flex flex-row md:flex-col justify-between items-center p-4 bg-white shadow-lg rounded-lg">
         <span class="font-bold">Loans</span>
-        <span class="text-gray-400">
+        <span class="text-red-400">
           ${amount().toLocaleString("en-us", { currency: "USD" })}
         </span>
       </div>

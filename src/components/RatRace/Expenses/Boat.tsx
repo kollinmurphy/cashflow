@@ -11,7 +11,7 @@ export default function Boat() {
     <Show when={sheet()?.current.boat}>
       <div class="flex flex-row md:flex-col justify-between items-center p-4 bg-white shadow-lg rounded-lg">
         <span class="font-bold">Boat</span>
-        <span class="text-gray-400">
+        <span class="text-red-400">
           ${BOAT_MONTHLY_PAYMENT.toLocaleString("en-us", { currency: "USD" })}
         </span>
       </div>

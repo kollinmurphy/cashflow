@@ -21,7 +21,7 @@ export const Boat = () => {
       <div class="flex flex-col items-start">
         <span class="font-bold">Boat</span>
         <Show when={purchased()}>
-          <span class="text-gray-400">
+          <span class="text-red-400">
             ${BOAT_PRICE.toLocaleString("en-us", { currency: "USD" })}
           </span>
         </Show>

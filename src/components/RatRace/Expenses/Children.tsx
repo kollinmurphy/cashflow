@@ -13,7 +13,7 @@ export default function Children() {
 
   return (
     <div class="flex flex-row justify-between items-center p-4 md:col-span-2 bg-white rounded-lg shadow-lg">
-      <div class="flex flex-col">
+      <div class="flex flex-col md:items-center flex-1">
         <span class="font-bold">
           Children{" "}
           <span class="text-xs">
@@ -22,7 +22,7 @@ export default function Children() {
           </span>
         </span>
 
-        <span class="text-gray-400">
+        <span class="text-red-400">
           $
           {cost().toLocaleString("en-us", {
             currency: "USD",

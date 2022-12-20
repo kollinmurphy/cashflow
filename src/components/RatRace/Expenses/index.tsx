@@ -33,7 +33,7 @@ export default function Expenses() {
           {(e, i) => (
             <div class="flex flex-row md:flex-col justify-between items-center p-4 bg-white shadow-lg rounded-lg">
               <span class="font-bold">{prettifyCamelCase(e.key)}</span>
-              <span class="text-gray-400">${e.value}</span>
+              <span class="text-red-400">${e.value}</span>
             </div>
           )}
         </For>

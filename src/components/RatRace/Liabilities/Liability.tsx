@@ -13,7 +13,7 @@ export default function Liability(props: { key: string; value: number }) {
     <div class="grid grid-cols-2 w-full justify-between items-center p-3 shadow-lg rounded-lg bg-white gap-2 md:gap-0">
       <div class="flex flex-col">
         <span class="font-bold">{prettifyCamelCase(props.key)}</span>
-        <span class="text-gray-400">
+        <span class="text-red-400">
           $
           {props.value.toLocaleString("en-us", {
             currency: "USD",

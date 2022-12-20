@@ -12,7 +12,7 @@ export const calculatePostRatRaceMonthlyCashflow = (sheet: Sheet | null) => {
   if (!sheet) return 0;
   const initial = sheet.current.postRatRace.startingIncome;
   const assets = sheet.current.postRatRace.assets.reduce(
-    (acc, cur) => acc + cur.amount,
+    (acc, cur) => acc + cur.cashflow,
     0
   );
   return initial + assets;
@@ -32,7 +32,10 @@ export const calculateExpenses = (sheet: Sheet | null) => {
 
 export const calculatePassiveIncome = (sheet: Sheet | null) => {
   if (!sheet) return 0;
-  const assets = sheet.current.assets.reduce((acc, cur) => acc + cur.amount, 0);
+  const assets = sheet.current.assets.reduce(
+    (acc, cur) => acc + cur.cashflow,
+    0
+  );
   return assets;
 };
 

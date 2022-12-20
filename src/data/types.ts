@@ -17,6 +17,7 @@ export type Sheet = {
       startingIncome: number;
       cash: number;
       assets: Asset[];
+      won: boolean;
     };
   };
   history: any[];

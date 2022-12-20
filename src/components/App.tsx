@@ -71,7 +71,7 @@ export default function App() {
                 </button>
               </Show>
             </div>
-            <div class="flex flex-row items-center gap-2">
+            <div class="flex flex-col md:flex-row items-center gap-2">
               <PayDay />
               <PayMoney />
               <TakeOutLoan />

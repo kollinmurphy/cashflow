@@ -1,6 +1,7 @@
 /* @jsxImportSource solid-js */
 
 import { arrayUnion } from "firebase/firestore";
+import { createEffect } from "solid-js";
 import { updateSheet } from "../data/firestore";
 import { sheetSignal } from "../data/signals";
 import {
@@ -18,8 +19,8 @@ export default function PayDay() {
   const expenses = () => calculateExpenses(sheet());
 
   return (
-    <div class="flex flex-row items-center gap-4">
-      <div class="flex flex-col items-end">
+    <div class="flex flex-col md:flex-row items-center gap-4">
+      <div class="flex flex-col items-center md:items-end">
         <div class="font-bold text-3xl">${sheet()?.current?.cash}</div>
         <div class="text-gray-400 text-sm">
           Passive Income: $
@@ -60,9 +61,17 @@ export const PostRatRacePayDay = () => {
   const goalCashflow = () =>
     (sheet()?.current.postRatRace.startingIncome || 0) + 50_000;
 
+  createEffect(() => {
+    if (cashflow() >= goalCashflow()) {
+      updateSheet(sheet()!.id, {
+        "current.postRatRace.won": true,
+      });
+    }
+  });
+
   return (
-    <div class="flex flex-row items-center gap-4">
-      <div class="flex flex-col items-end">
+    <div class="flex flex-col md:flex-row items-center gap-4">
+      <div class="flex flex-col items-center md:items-end">
         <div class="font-bold text-3xl">
           ${sheet()?.current.postRatRace.cash}
         </div>

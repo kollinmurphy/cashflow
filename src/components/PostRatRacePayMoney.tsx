@@ -5,7 +5,7 @@ import { updateSheet } from "../data/firestore";
 import { sheetSignal } from "../data/signals";
 import ConditionalErrorAlert from "./ConditionalErrorAlert";
 
-export default function PayMoney() {
+export default function PostRatRacePayMoney() {
   const [sheet] = sheetSignal;
   const [error, setError] = createSignal("");
 
@@ -14,10 +14,17 @@ export default function PayMoney() {
 
   return (
     <div class="flex flex-row items-center gap-4">
-      <label for="pay-money-modal" class="btn btn-error btn-outline">
+      <label
+        for="pay-money-modal-post-rat-race"
+        class="btn btn-error btn-outline"
+      >
         Pay Money
       </label>
-      <input type="checkbox" id="pay-money-modal" class="modal-toggle" />
+      <input
+        type="checkbox"
+        id="pay-money-modal-post-rat-race"
+        class="modal-toggle"
+      />
       <div class="modal">
         <div class="modal-box">
           <h3 class="font-bold text-lg mb-4">Pay Money</h3>
@@ -28,7 +35,7 @@ export default function PayMoney() {
           </div>
           <div class="modal-action">
             <label
-              for="pay-money-modal"
+              for="pay-money-modal-post-rat-race"
               class="btn btn-primary btn-outline"
               ref={closeRef}
             >
@@ -39,14 +46,14 @@ export default function PayMoney() {
               onClick={() => {
                 const amount = parseInt(amountRef.value);
                 if (!amount)
-                  return setError("Please enter a valid amount to add.");
-                const cash = sheet()!.current.cash;
+                  return setError("Please enter a valid amount to pay.");
+                const cash = sheet()!.current.postRatRace.cash;
                 if (amount > cash)
                   return setError(
                     "You can't pay more than you have in cash. Please pay less."
                   );
                 updateSheet(sheet()!.id, {
-                  "current.cash": cash - amount,
+                  "current.postRatRace.cash": cash - amount,
                 });
                 closeRef.click();
               }}

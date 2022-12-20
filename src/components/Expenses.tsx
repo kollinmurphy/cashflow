@@ -24,7 +24,7 @@ export default function Expenses() {
     <div class="border-2 border-black flex flex-col p-4 rounded-lg">
       <h3 class="text-2xl font-bold">Expenses</h3>
       <div class="divider" />
-      <div class="grid grid-cols-3 lg:grid-cols-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6">
         <For each={expenses()}>
           {(e, i) => (
             <div class="flex flex-row justify-between items-center p-1">

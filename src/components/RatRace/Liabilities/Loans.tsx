@@ -1,9 +1,9 @@
 /* @jsxImportSource solid-js */
 
 import { createSignal } from "solid-js";
-import { updateSheet } from "../data/firestore";
-import { sheetSignal } from "../data/signals";
-import ConditionalErrorAlert from "./ConditionalErrorAlert";
+import { updateSheet } from "../../../data/firestore";
+import { sheetSignal } from "../../../data/signals";
+import ConditionalErrorAlert from "../../ConditionalErrorAlert";
 
 export const Loans = () => {
   const [sheet] = sheetSignal;
@@ -13,7 +13,7 @@ export const Loans = () => {
   let closeRef!: HTMLLabelElement;
 
   return (
-    <div class="flex flex-row justify-between items-center p-3 border-t-2">
+    <div class="flex flex-row justify-between items-center p-3 bg-white rounded-lg shadow-lg">
       <div class="flex flex-col items-start">
         <span class="font-bold">Loans</span>
         <span class="text-gray-400">
@@ -24,7 +24,7 @@ export const Loans = () => {
         </span>
       </div>
       <div class="flex">
-        <label class="btn btn-secondary" for="pay-loan-modal">
+        <label class="btn btn-secondary btn-sm" for="pay-loan-modal">
           Pay Off
         </label>
       </div>
@@ -50,8 +50,10 @@ export const Loans = () => {
               class="btn btn-primary"
               onClick={() => {
                 const amount = parseInt(amountRef.value);
-                if (!amount)
+                if (!amount || amount < 0)
                   return setError("Please enter a valid amount to pay.");
+                if (amount % 1000 !== 0)
+                  return setError("Amount must be a multiple of $1000.");
                 const cash = sheet()!.current.cash;
                 if (amount > cash)
                   return setError(

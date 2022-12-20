@@ -1,9 +1,12 @@
 /* @jsxImportSource solid-js */
 
 import { For } from "solid-js";
-import { sheetSignal } from "../data/signals";
-import type { Expenses } from "../data/types";
+import { sheetSignal } from "../../../data/signals";
+import type { Expenses } from "../../../data/types";
+import { prettifyCamelCase } from "../../../data/utils";
+import Boat from "./Boat";
 import Children from "./Children";
+import Loans from "./Loans";
 
 export default function Expenses() {
   const [sheet] = sheetSignal;
@@ -24,18 +27,18 @@ export default function Expenses() {
     <div class="border-2 border-black flex flex-col p-4 rounded-lg">
       <h3 class="text-2xl font-bold">Expenses</h3>
       <div class="divider" />
-      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-7 gap-3">
+        <Children />
         <For each={expenses()}>
           {(e, i) => (
-            <div class="flex flex-row justify-between items-center p-1">
-              <div class="flex flex-col">
-                <span class="font-bold">{e.key}</span>
-                <span class="text-gray-400">${e.value}</span>
-              </div>
+            <div class="flex flex-row md:flex-col justify-between items-center p-4 bg-white shadow-lg rounded-lg">
+              <span class="font-bold">{prettifyCamelCase(e.key)}</span>
+              <span class="text-gray-400">${e.value}</span>
             </div>
           )}
         </For>
-        <Children />
+        <Boat />
+        <Loans />
       </div>
     </div>
   );

@@ -2,10 +2,10 @@
 
 import { arrayUnion } from "firebase/firestore";
 import { createSignal, For } from "solid-js";
-import { updateSheet } from "../data/firestore";
-import { sheetSignal } from "../data/signals";
-import { StockAsset, StockName } from "../data/types";
-import ConditionalErrorAlert from "./ConditionalErrorAlert";
+import { updateSheet } from "../../../data/firestore";
+import { sheetSignal } from "../../../data/signals";
+import { StockAsset, StockName } from "../../../data/types";
+import ConditionalErrorAlert from "../../ConditionalErrorAlert";
 import Stock from "./Stock";
 
 export default function Stocks() {
@@ -31,22 +31,13 @@ export default function Stocks() {
         </label>
       </div>
       <div class="divider" />
-      <div class="flex flex-col">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
         <For
           each={stocks()}
-          fallback={
-            <div class="flex flex-row justify-between items-center p-3">
-              <div class="flex flex-col">
-                <span class="font-bold">No stocks</span>
-              </div>
-            </div>
-          }
+          fallback={<span class="font-bold">No stocks</span>}
         >
           {(stock, i) => (
-            <Stock
-              stock={sheet()?.current?.stocks[stock as StockName]!}
-              index={i()}
-            />
+            <Stock stock={sheet()?.current?.stocks[stock as StockName]!} />
           )}
         </For>
       </div>

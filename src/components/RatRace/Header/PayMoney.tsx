@@ -1,11 +1,11 @@
 /* @jsxImportSource solid-js */
 
 import { createSignal } from "solid-js";
-import { updateSheet } from "../data/firestore";
-import { sheetSignal } from "../data/signals";
-import ConditionalErrorAlert from "./ConditionalErrorAlert";
+import { updateSheet } from "../../../data/firestore";
+import { sheetSignal } from "../../../data/signals";
+import ConditionalErrorAlert from "../../ConditionalErrorAlert";
 
-export default function PostRatRacePayMoney() {
+export default function PayMoney() {
   const [sheet] = sheetSignal;
   const [error, setError] = createSignal("");
 
@@ -13,18 +13,11 @@ export default function PostRatRacePayMoney() {
   let closeRef!: HTMLLabelElement;
 
   return (
-    <div class="flex flex-row items-center gap-4">
-      <label
-        for="pay-money-modal-post-rat-race"
-        class="btn btn-error btn-outline"
-      >
+    <>
+      <label for="pay-money-modal" class="btn btn-error btn-outline w-full md:w-auto">
         Pay Money
       </label>
-      <input
-        type="checkbox"
-        id="pay-money-modal-post-rat-race"
-        class="modal-toggle"
-      />
+      <input type="checkbox" id="pay-money-modal" class="modal-toggle" />
       <div class="modal">
         <div class="modal-box">
           <h3 class="font-bold text-lg mb-4">Pay Money</h3>
@@ -35,7 +28,7 @@ export default function PostRatRacePayMoney() {
           </div>
           <div class="modal-action">
             <label
-              for="pay-money-modal-post-rat-race"
+              for="pay-money-modal"
               class="btn btn-primary btn-outline"
               ref={closeRef}
             >
@@ -45,15 +38,15 @@ export default function PostRatRacePayMoney() {
               class="btn btn-primary"
               onClick={() => {
                 const amount = parseInt(amountRef.value);
-                if (!amount)
+                if (!amount || amount < 0)
                   return setError("Please enter a valid amount to pay.");
-                const cash = sheet()!.current.postRatRace.cash;
+                const cash = sheet()!.current.cash;
                 if (amount > cash)
                   return setError(
                     "You can't pay more than you have in cash. Please pay less."
                   );
                 updateSheet(sheet()!.id, {
-                  "current.postRatRace.cash": cash - amount,
+                  "current.cash": cash - amount,
                 });
                 closeRef.click();
               }}
@@ -63,6 +56,6 @@ export default function PostRatRacePayMoney() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

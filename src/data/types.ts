@@ -23,11 +23,24 @@ export type Sheet = {
   history: any[];
 };
 
-export type Asset = {
+export type Asset = RealEstateAsset | OtherAsset;
+
+export interface GenericAsset {
   id: string;
   name: string;
-  amount: number;
-};
+  cashflow: number;
+  cost: number;
+}
+
+export interface RealEstateAsset extends GenericAsset {
+  type: "realEstate";
+  mortgage: number;
+  downPayment: number;
+}
+
+export interface OtherAsset extends GenericAsset {
+  type: "other";
+}
 
 export enum StockName {
   ON2U = "ON2U",

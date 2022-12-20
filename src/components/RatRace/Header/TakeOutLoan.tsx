@@ -2,9 +2,9 @@
 
 import { arrayUnion } from "firebase/firestore";
 import { createSignal } from "solid-js";
-import { updateSheet } from "../data/firestore";
-import { sheetSignal } from "../data/signals";
-import ConditionalErrorAlert from "./ConditionalErrorAlert";
+import { updateSheet } from "../../../data/firestore";
+import { sheetSignal } from "../../../data/signals";
+import ConditionalErrorAlert from "../../ConditionalErrorAlert";
 
 export default function TakeOutLoan() {
   const [sheet] = sheetSignal;
@@ -14,9 +14,12 @@ export default function TakeOutLoan() {
   let closeRef!: HTMLLabelElement;
 
   return (
-    <div class="flex flex-row items-center gap-4">
-      <label for="take-load-modal" class="btn btn-secondary btn-outline">
-        Loan
+    <>
+      <label
+        for="take-load-modal"
+        class="btn btn-info btn-outline w-full md:w-auto"
+      >
+        Take Loan
       </label>
       <input type="checkbox" id="take-load-modal" class="modal-toggle" />
       <div class="modal">
@@ -24,7 +27,12 @@ export default function TakeOutLoan() {
           <h3 class="font-bold text-lg mb-4">Take Out Loan</h3>
           <div class="flex flex-col gap-2">
             <span>Amount</span>
-            <input type="number" class="input input-bordered" ref={amountRef} />
+            <input
+              type="number"
+              class="input input-bordered"
+              ref={amountRef}
+              value={0}
+            />
             <ConditionalErrorAlert error={error()} />
           </div>
           <div class="modal-action">
@@ -39,8 +47,10 @@ export default function TakeOutLoan() {
               class="btn btn-primary"
               onClick={() => {
                 const amount = parseInt(amountRef.value);
-                if (!amount)
+                if (!amount || amount < 0)
                   return setError("Please enter a valid amount to add.");
+                if (amount % 1000 !== 0)
+                  return setError("Amount must be a multiple of $1000.");
                 const cash = sheet()?.current.cash || 0;
                 const loans = sheet()?.current.loans || 0;
                 updateSheet(sheet()!.id, {
@@ -51,6 +61,7 @@ export default function TakeOutLoan() {
                   ),
                 });
                 closeRef.click();
+                amountRef.value = "0";
               }}
             >
               Take Loan
@@ -58,6 +69,6 @@ export default function TakeOutLoan() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

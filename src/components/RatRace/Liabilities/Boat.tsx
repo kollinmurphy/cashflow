@@ -1,8 +1,8 @@
 /* @jsxImportSource solid-js */
 
 import { Show } from "solid-js";
-import { updateSheet } from "../data/firestore";
-import { sheetSignal } from "../data/signals";
+import { updateSheet } from "../../../data/firestore";
+import { sheetSignal } from "../../../data/signals";
 
 export const BOAT_PRICE = 17_000;
 export const BOAT_DOWN_PAYMENT = 1_000;
@@ -17,7 +17,7 @@ export const Boat = () => {
   const payOffDisabled = () => (sheet()?.current?.cash || 0) < BOAT_PRICE;
 
   return (
-    <div class="flex flex-row justify-between items-center p-3 border-t-2">
+    <div class="flex flex-row justify-between items-center p-3 bg-white rounded-lg shadow-lg">
       <div class="flex flex-col items-start">
         <span class="font-bold">Boat</span>
         <Show when={purchased()}>
@@ -31,7 +31,7 @@ export const Boat = () => {
           when={purchased()}
           fallback={
             <button
-              class="btn btn-secondary"
+              class="btn btn-secondary btn-sm"
               disabled={purchaseDisabled()}
               onClick={() => {
                 updateSheet(sheet()!.id, {
@@ -45,7 +45,7 @@ export const Boat = () => {
           }
         >
           <button
-            class="btn btn-secondary"
+            class="btn btn-secondary btn-sm"
             disabled={payOffDisabled()}
             onClick={() => {
               updateSheet(sheet()!.id, {

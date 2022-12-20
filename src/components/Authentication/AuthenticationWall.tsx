@@ -1,8 +1,8 @@
 /* @jsxImportSource solid-js */
 
 import { JSXElement, onMount, Show } from "solid-js";
-import { initializeAuth } from "../data/auth";
-import { userSignal } from "../data/signals";
+import { initializeAuth } from "../../data/auth";
+import { userSignal } from "../../data/signals";
 
 export default function AuthenticationWall(props: { children: JSXElement }) {
   const [user] = userSignal;

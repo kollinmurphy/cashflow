@@ -1,4 +1,4 @@
-import { BOAT_MONTHLY_PAYMENT } from "../components/Boat";
+import { BOAT_MONTHLY_PAYMENT } from "../components/RatRace/Liabilities/Boat";
 import type { Sheet } from "./types";
 
 export const calculateMonthlyCashflow = (sheet: Sheet | null) => {
@@ -35,3 +35,6 @@ export const calculatePassiveIncome = (sheet: Sheet | null) => {
   const assets = sheet.current.assets.reduce((acc, cur) => acc + cur.amount, 0);
   return assets;
 };
+
+export const prettifyCamelCase = (str: string) =>
+  str.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase());

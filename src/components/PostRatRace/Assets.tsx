@@ -3,10 +3,10 @@
 import { arrayUnion } from "firebase/firestore";
 import { createSignal, For } from "solid-js";
 import { v4 as uuid } from "uuid";
-import { updateSheet } from "../data/firestore";
-import { sheetSignal } from "../data/signals";
-import type { Asset } from "../data/types";
-import ConditionalErrorAlert from "./ConditionalErrorAlert";
+import { updateSheet } from "../../data/firestore";
+import { sheetSignal } from "../../data/signals";
+import type { Asset } from "../../data/types";
+import ConditionalErrorAlert from "../ConditionalErrorAlert";
 
 export default function PostRatRaceAssets() {
   const [error, setError] = createSignal<string | null>(null);

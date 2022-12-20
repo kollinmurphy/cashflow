@@ -2,12 +2,12 @@
 
 import { arrayUnion } from "firebase/firestore";
 import { createSignal } from "solid-js";
-import { updateSheet } from "../data/firestore";
-import { sheetSignal } from "../data/signals";
-import type { StockAsset } from "../data/types";
-import ConditionalErrorAlert from "./ConditionalErrorAlert";
+import { updateSheet } from "../../../data/firestore";
+import { sheetSignal } from "../../../data/signals";
+import type { StockAsset } from "../../../data/types";
+import ConditionalErrorAlert from "../../ConditionalErrorAlert";
 
-export default function Stock(props: { stock: StockAsset; index: number }) {
+export default function Stock(props: { stock: StockAsset }) {
   const [sheet] = sheetSignal;
   const [error, setError] = createSignal<string | null>(null);
 
@@ -42,12 +42,7 @@ export default function Stock(props: { stock: StockAsset; index: number }) {
   };
 
   return (
-    <div
-      class="flex flex-row justify-between items-center p-3"
-      classList={{
-        "border-t-2": props.index !== 0,
-      }}
-    >
+    <div class="flex flex-col md:flex-row justify-between items-center p-3 bg-white rounded-lg shadow-lg">
       <div class="flex flex-col">
         <span class="font-bold">{props.stock.name}</span>
         <span class="text-gray-400">
@@ -58,7 +53,7 @@ export default function Stock(props: { stock: StockAsset; index: number }) {
           )
         </span>
       </div>
-      <div class="flex flex-row gap-2">
+      <div class="grid grid-cols-2 w-full md:w-auto md:flex md:flex-row md:justify-between gap-2">
         <label for={splitModalId()} class="btn btn-secondary btn-outline">
           Split
         </label>

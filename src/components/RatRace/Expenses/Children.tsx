@@ -22,7 +22,12 @@ export default function Children() {
           </span>
         </span>
 
-        <span class="text-red-400">
+        <span
+          class="text-gray-400"
+          classList={{
+            "text-red-400": cost() > 0,
+          }}
+        >
           $
           {cost().toLocaleString("en-us", {
             currency: "USD",

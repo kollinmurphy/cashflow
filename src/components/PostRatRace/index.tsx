@@ -1,13 +1,17 @@
 /* @jsxImportSource solid-js */
 
-import { Show } from "solid-js";
+import { createEffect, Show } from "solid-js";
+import { updateSheet } from "../../data/firestore";
 import { sheetSignal } from "../../data/signals";
+import { calculatePostRatRaceMonthlyCashflow } from "../../data/utils";
 import EndGame from "../EndGame";
 import Profession from "../Profession";
-import AddMoney from "./AddMoney";
 import Assets from "./Assets";
-import PayDay from "./PayDay";
-import PayMoney from "./PayMoney";
+import AddMoney from "./Header/AddMoney";
+import BuyCheese from "./Header/BuyCheese";
+import IncomeInfo from "./Header/IncomeInfo";
+import PayDay from "./Header/PayDay";
+import PayMoney from "./Header/PayMoney";
 import WonGame from "./WonGame";
 
 export default function PostRatRace() {
@@ -15,34 +19,41 @@ export default function PostRatRace() {
 
   const won = () => sheet()?.current.postRatRace.won;
 
+  const cashflow = () => calculatePostRatRaceMonthlyCashflow(sheet());
+  const goalCashflow = () =>
+    (sheet()?.current.postRatRace.startingIncome || 0) + 50_000;
+
+  createEffect(() => {
+    if (cashflow() >= goalCashflow()) {
+      updateSheet(sheet()!.id, {
+        "current.postRatRace.won": true,
+      });
+    }
+  });
+
   return (
-    <div>
-      <div class="flex flex-col gap-4">
-        <div class="flex flex-col md:flex-row gap-3 justify-between">
-          <div class="flex flex-col gap-2">
-            <Profession />
-            <Show when={!won()}>
-              <div class="btn btn-secondary btn-outline btn-sm">
-                I Bought My Cheese
-              </div>
-            </Show>
+    <Show when={!won()} fallback={<WonGame />}>
+      <div class="p-4 md:p-8">
+        <div class="flex flex-col gap-4">
+          <div class="flex flex-col md:flex-row gap-3 justify-between">
+            <div class="flex flex-col gap-1">
+              <Profession />
+              <IncomeInfo />
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center gap-2">
+              <BuyCheese />
+              <AddMoney />
+              <PayMoney />
+              <PayDay />
+            </div>
           </div>
 
-          <Show when={!won()}>
-            <div class="flex flex-col md:flex-row items-center gap-2">
-              <PayDay />
-              <PayMoney />
-              <AddMoney />
-            </div>
-          </Show>
-        </div>
-
-        <Show when={!won()} fallback={<WonGame />}>
           <Assets />
-        </Show>
 
-        <EndGame />
+          <EndGame />
+        </div>
       </div>
-    </div>
+    </Show>
   );
 }

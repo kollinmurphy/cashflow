@@ -1,9 +1,9 @@
 /* @jsxImportSource solid-js */
 
 import { createSignal } from "solid-js";
-import { updateSheet } from "../../data/firestore";
-import { sheetSignal } from "../../data/signals";
-import ConditionalErrorAlert from "../ConditionalErrorAlert";
+import { updateSheet } from "../../../data/firestore";
+import { sheetSignal } from "../../../data/signals";
+import ConditionalErrorAlert from "../../ConditionalErrorAlert";
 
 export default function AddMoney() {
   const [sheet] = sheetSignal;
@@ -35,7 +35,7 @@ export default function AddMoney() {
     <>
       <label
         for="add-money-modal-post-rat-race"
-        class="btn btn-secondary btn-outline"
+        class="btn btn-success btn-outline"
       >
         Add Money
       </label>
@@ -46,7 +46,7 @@ export default function AddMoney() {
       />
       <div class="modal">
         <div class="modal-box">
-          <h3 class="font-bold text-lg mb-4">Pay Money</h3>
+          <h3 class="font-bold text-lg mb-4">Add Money</h3>
           <div class="flex flex-col gap-2">
             <span>Amount</span>
             <input

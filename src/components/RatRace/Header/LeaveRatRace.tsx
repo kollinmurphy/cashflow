@@ -1,6 +1,7 @@
 /* @jsxImportSource solid-js */
 
 import { Show } from "solid-js";
+import { createFireworks } from "../../../data/confetti";
 import { updateSheet } from "../../../data/firestore";
 import { sheetSignal } from "../../../data/signals";
 import {
@@ -30,6 +31,7 @@ export default function LeaveRatRace() {
             "current.postRatRace.startingIncome": monthly,
             "current.postRatRace.cash": monthly,
           });
+          createFireworks();
         }}
       >
         Leave Rat Race

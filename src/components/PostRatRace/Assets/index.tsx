@@ -3,10 +3,11 @@
 import { arrayUnion } from "firebase/firestore";
 import { createSignal, For } from "solid-js";
 import { v4 as uuid } from "uuid";
-import { updateSheet } from "../../data/firestore";
-import { sheetSignal } from "../../data/signals";
-import type { Asset, OtherAsset } from "../../data/types";
-import ConditionalErrorAlert from "../ConditionalErrorAlert";
+import { updateSheet } from "../../../data/firestore";
+import { sheetSignal } from "../../../data/signals";
+import type { OtherAsset } from "../../../data/types";
+import ConditionalErrorAlert from "../../ConditionalErrorAlert";
+import Asset from "./Asset";
 
 export default function PostRatRaceAssets() {
   const [error, setError] = createSignal<string | null>(null);
@@ -14,16 +15,16 @@ export default function PostRatRaceAssets() {
   const [sheet] = sheetSignal;
 
   let nameRef!: HTMLInputElement;
-  let amountRef!: HTMLInputElement;
+  let cashflowRef!: HTMLInputElement;
   let costRef!: HTMLInputElement;
   let closeRef!: HTMLLabelElement;
 
   const resetForm = () => {
     setTimeout(() => {
       costRef.value = "0";
-      amountRef.value = "0";
+      cashflowRef.value = "0";
       nameRef.value = "";
-      closeRef.click();
+      setError(null);
     }, 150);
   };
 
@@ -32,7 +33,12 @@ export default function PostRatRaceAssets() {
     const cash = sheet()!.current.postRatRace.cash;
     if (cost > cash)
       return setError(
-        `You don't have enough cash to buy this asset. You have $${cash} but this asset costs $${cost}`
+        `You don't have enough cash to buy this asset. You have $${cash.toLocaleString(
+          "en-us",
+          { currency: "USD" }
+        )} but this asset costs $${cost.toLocaleString("en-us", {
+          currency: "USD",
+        })}`
       );
     updateSheet(sheet()!.id, {
       "current.postRatRace.cash": cash - cost,
@@ -40,7 +46,7 @@ export default function PostRatRaceAssets() {
         id: uuid(),
         type: "other",
         name: nameRef.value,
-        cashflow: Number(amountRef.value),
+        cashflow: Number(cashflowRef.value),
       } as OtherAsset),
       history: arrayUnion(
         `${new Date().toISOString()}: Bought big asset ${nameRef.value} for $${
@@ -71,38 +77,7 @@ export default function PostRatRaceAssets() {
             </div>
           }
         >
-          {(asset, i) => (
-            <div
-              class="flex flex-row justify-between items-center p-3"
-              classList={{
-                "border-t-2": i() !== 0,
-              }}
-            >
-              <div class="flex flex-col">
-                <span class="font-bold">{asset.name}</span>
-                <span class="text-gray-400">${asset.cashflow}</span>
-              </div>
-              <div class="flex flex-row gap-2">
-                <button
-                  class="btn btn-primary btn-outline"
-                  onClick={() => {
-                    updateSheet(sheet()!.id, {
-                      "current.assets": sheet()!.current.assets.filter(
-                        (a: Asset) => a.id !== asset.id
-                      ),
-                      history: arrayUnion(
-                        `${new Date().toISOString()}: Removed asset ${
-                          asset.name
-                        }`
-                      ),
-                    });
-                  }}
-                >
-                  Remove
-                </button>
-              </div>
-            </div>
-          )}
+          {(asset) => <Asset asset={asset} />}
         </For>
       </div>
       <input type="checkbox" id="add-asset-modal" class="modal-toggle" />
@@ -112,8 +87,13 @@ export default function PostRatRaceAssets() {
           <div class="flex flex-col gap-2">
             <span>Name</span>
             <input class="input input-bordered" ref={nameRef} />
-            <span>Monthly Dividend</span>
-            <input type="number" class="input input-bordered" ref={amountRef} />
+            <span>Monthly Cashflow</span>
+            <input
+              type="number"
+              class="input input-bordered"
+              ref={cashflowRef}
+              value={0}
+            />
             <span>Cost</span>
             <input
               type="number"
@@ -128,6 +108,7 @@ export default function PostRatRaceAssets() {
               for="add-asset-modal"
               class="btn btn-primary btn-outline"
               ref={closeRef}
+              onClick={resetForm}
             >
               Cancel
             </label>

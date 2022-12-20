@@ -46,6 +46,8 @@ import AuthenticatedRedirect from "../components/Authentication/AuthenticatedRed
   }
 </style>
 <Layout title="Cashflow">
-  <Login client:only="solid-js" />
-  <AuthenticatedRedirect client:only="solid-js" />
+  <div class="p-8">
+    <Login client:only="solid-js" />
+    <AuthenticatedRedirect client:only="solid-js" />
+  </div>
 </Layout>

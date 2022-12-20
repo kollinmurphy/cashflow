@@ -24,7 +24,7 @@ export default function App() {
     <Show
       when={sheet()}
       fallback={
-        <>
+        <div class="p-4 md:p-8">
           <ChooseProfession
             onChoose={async (p) => {
               const sheet = await createSheet(user()!.uid, p);
@@ -40,7 +40,7 @@ export default function App() {
           >
             Sign Out
           </button>
-        </>
+        </div>
       }
     >
       <Show when={!sheet()?.current.leftRatRace} fallback={<PostRatRace />}>

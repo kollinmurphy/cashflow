@@ -1,6 +1,5 @@
 /* @jsxImportSource solid-js */
 
-import { sheetSignal } from "../../data/signals";
 import EndGame from "../EndGame";
 import Profession from "../Profession";
 import Assets from "./Assets";
@@ -15,10 +14,8 @@ import Liabilities from "./Liabilities";
 import Stocks from "./Stocks";
 
 export default function RatRace() {
-  const [sheet, setSheet] = sheetSignal;
-
   return (
-    <div class="flex flex-col gap-4">
+    <div class="p-4 md:p-8 flex flex-col gap-4">
       <div class="flex flex-col md:flex-row gap-3 justify-between md:items-end">
         <div class="flex flex-col gap-1">
           <Profession />

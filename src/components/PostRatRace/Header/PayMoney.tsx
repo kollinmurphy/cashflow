@@ -1,9 +1,9 @@
 /* @jsxImportSource solid-js */
 
 import { createSignal } from "solid-js";
-import { updateSheet } from "../../data/firestore";
-import { sheetSignal } from "../../data/signals";
-import ConditionalErrorAlert from "../ConditionalErrorAlert";
+import { updateSheet } from "../../../data/firestore";
+import { sheetSignal } from "../../../data/signals";
+import ConditionalErrorAlert from "../../ConditionalErrorAlert";
 
 export default function PayMoney() {
   const [sheet] = sheetSignal;
@@ -32,7 +32,6 @@ export default function PayMoney() {
       "current.postRatRace.cash": cash - amount,
     });
     closeRef.click();
-    resetForm();
   };
 
   return (

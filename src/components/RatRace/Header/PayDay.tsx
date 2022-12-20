@@ -11,20 +11,35 @@ export default function PayDay() {
 
   const cashflow = () => calculateMonthlyCashflow(sheet());
 
+  const handlePayDay = () => {
+    updateSheet(sheet()!.id, {
+      "current.cash": sheet()!.current.cash + cashflow(),
+      history: arrayUnion(
+        `${new Date().toISOString()}: Pay Day, received $${cashflow()}`
+      ),
+    });
+  };
+
   return (
-    <div
-      class="btn btn-success w-full md:w-auto hover:scale-105"
-      onClick={() => {
-        createConfetti({ y: 0, x: 0.1 });
-        updateSheet(sheet()!.id, {
-          "current.cash": sheet()!.current.cash + cashflow(),
-          history: arrayUnion(
-            `${new Date().toISOString()}: Pay Day, received $${cashflow()}`
-          ),
-        });
-      }}
-    >
-      Pay Day
-    </div>
+    <>
+      <div
+        class="hidden md:flex btn btn-success w-full md:w-auto hover:scale-105"
+        onClick={() => {
+          createConfetti({ y: 0, x: 0.1 });
+          handlePayDay();
+        }}
+      >
+        Pay Day
+      </div>
+      <div
+        class="flex md:hidden btn btn-success w-full md:w-auto hover:scale-105"
+        onClick={() => {
+          createConfetti({ y: 0, x: 0.5 });
+          handlePayDay();
+        }}
+      >
+        Pay Day
+      </div>
+    </>
   );
 }

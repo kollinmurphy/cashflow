@@ -82,7 +82,7 @@ export default function Asset(props: { asset: Asset }) {
             <span>Amount</span>
             <input
               type="number"
-              class="input input-bordered"
+              class="input input-bordered focus:outline-none focus:ring-2"
               ref={amountRef}
               value={0}
             />

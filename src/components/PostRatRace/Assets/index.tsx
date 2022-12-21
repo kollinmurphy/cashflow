@@ -88,18 +88,18 @@ export default function PostRatRaceAssets() {
           <h3 class="font-bold text-lg mb-4">Add New Asset</h3>
           <div class="flex flex-col gap-2">
             <span>Name</span>
-            <input class="input input-bordered" ref={nameRef} />
+            <input class="input input-bordered focus:outline-none focus:ring-2" ref={nameRef} />
             <span>Monthly Cashflow</span>
             <input
               type="number"
-              class="input input-bordered"
+              class="input input-bordered focus:outline-none focus:ring-2"
               ref={cashflowRef}
               value={0}
             />
             <span>Cost</span>
             <input
               type="number"
-              class="input input-bordered"
+              class="input input-bordered focus:outline-none focus:ring-2"
               ref={costRef}
               value={0}
             />

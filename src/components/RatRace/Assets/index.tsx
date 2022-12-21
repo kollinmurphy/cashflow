@@ -126,6 +126,7 @@ export default function Assets() {
             name: nameRef.value,
             cashflow: parseInt(cashflowRef.value),
           } as OtherAsset);
+    // return console.log(asset)
     updateSheet(sheet()!.id, {
       "current.cash": cash - payment,
       "current.assets": arrayUnion(asset as AssetType),
@@ -202,25 +203,25 @@ export default function Assets() {
               </Match>
               <Match when={type() === "realEstate"}>
                 <span>Name</span>
-                <input class="input input-bordered" ref={nameRef} />
+                <input class="input input-bordered focus:outline-none focus:ring-2" ref={nameRef} />
                 <span>Monthly Cashflow</span>
                 <input
                   type="number"
-                  class="input input-bordered"
+                  class="input input-bordered focus:outline-none focus:ring-2"
                   ref={cashflowRef}
                   value={0}
                 />
                 <span>Cost</span>
                 <input
                   type="number"
-                  class="input input-bordered"
+                  class="input input-bordered focus:outline-none focus:ring-2"
                   ref={costRef}
                   value={0}
                 />
                 <span>Down Payment</span>
                 <input
                   type="number"
-                  class="input input-bordered"
+                  class="input input-bordered focus:outline-none focus:ring-2"
                   ref={downpayRef}
                   value={0}
                 />
@@ -245,7 +246,7 @@ export default function Assets() {
               </Match>
               <Match when={type() === "stock"}>
                 <span>Stock</span>
-                <select class="select select-bordered" ref={nameRef}>
+                <select class="select select-bordered focus:outline-none focus:ring-2" ref={nameRef}>
                   <option value="" disabled selected>
                     Select a stock
                   </option>
@@ -256,13 +257,13 @@ export default function Assets() {
                 <span>Shares</span>
                 <input
                   type="number"
-                  class="input input-bordered"
+                  class="input input-bordered focus:outline-none focus:ring-2"
                   ref={sharesRef}
                 />
                 <span>Price</span>
                 <input
                   type="number"
-                  class="input input-bordered"
+                  class="input input-bordered focus:outline-none focus:ring-2"
                   ref={costRef}
                   value={1}
                 />

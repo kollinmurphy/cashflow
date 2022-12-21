@@ -26,7 +26,7 @@ export default function PayDay() {
       }}
     >
       <Icon icon="material-symbols:attach-money-rounded" class="text-xl mr-1" />
-      Pay Day
+      Pay Check
     </div>
   );
 }

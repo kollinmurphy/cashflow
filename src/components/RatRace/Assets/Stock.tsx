@@ -164,14 +164,14 @@ export default function Stock(props: { stock: StockAsset }) {
             <span>Shares</span>
             <input
               type="number"
-              class="input input-bordered"
+              class="input input-bordered focus:outline-none focus:ring-2"
               ref={sharesRef}
               value={0}
             />
             <span>Price</span>
             <input
               type="number"
-              class="input input-bordered"
+              class="input input-bordered focus:outline-none focus:ring-2"
               ref={priceRef}
               value={1}
             />
@@ -201,14 +201,14 @@ export default function Stock(props: { stock: StockAsset }) {
             <span>Shares</span>
             <input
               type="number"
-              class="input input-bordered"
+              class="input input-bordered focus:outline-none focus:ring-2"
               ref={sellSharesRef}
               value={0}
             />
             <span>Price</span>
             <input
               type="number"
-              class="input input-bordered"
+              class="input input-bordered focus:outline-none focus:ring-2"
               ref={sellPriceRef}
               value={1}
             />

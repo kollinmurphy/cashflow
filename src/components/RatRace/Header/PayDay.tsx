@@ -34,7 +34,7 @@ export default function PayDay() {
           icon="material-symbols:attach-money-rounded"
           class="text-xl mr-1"
         />
-        Pay Day
+        Pay Check
       </div>
       <div
         class="flex md:hidden btn btn-success w-full md:w-auto hover:scale-105"
@@ -47,7 +47,7 @@ export default function PayDay() {
           icon="material-symbols:attach-money-rounded"
           class="text-xl mr-1"
         />
-        Pay Day
+        Pay Check
       </div>
     </>
   );

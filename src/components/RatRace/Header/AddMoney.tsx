@@ -25,7 +25,7 @@ export default function AddMoney() {
       <input type="checkbox" id="add-money-modal" class="modal-toggle" />
       <div class="modal">
         <div class="modal-box">
-          <h3 class="font-bold text-lg mb-4">Pay Money</h3>
+          <h3 class="font-bold text-lg mb-4">Add Money</h3>
           <div class="flex flex-col gap-2">
             <span>Amount</span>
             <input

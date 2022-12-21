@@ -36,12 +36,14 @@ export default function Stock(props: { stock: StockAsset }) {
     const totalShares = Math.floor(previousShares * factor);
     const avgPrice = (previous?.avgPrice || 0) / factor;
 
+    const asset: StockAsset = {
+      ...previous,
+      shares: totalShares,
+      avgPrice,
+    };
+
     updateSheet(sheet()!.id, {
-      ["current.stocks." + props.stock.name]: {
-        name: props.stock.name,
-        shares: totalShares,
-        avgPrice,
-      } as StockAsset,
+      ["current.stocks." + props.stock.name]: asset,
       history: arrayUnion(
         `${new Date().toISOString()}: Split ${props.stock} by ${factor}x`
       ),
@@ -116,11 +118,11 @@ export default function Stock(props: { stock: StockAsset }) {
 
   return (
     <div class="flex flex-col md:flex-row justify-between items-center p-3 bg-white rounded-lg shadow-lg">
-      <div class="flex flex-col">
+      <div class="flex flex-col gap-1">
         <span class="font-bold">{props.stock.stock} Stock</span>
         <Show when={props.stock.cashflow}>
           <span class="text-green-600">
-            $
+            Cashflow: $
             {(props.stock.cashflow * props.stock.shares).toLocaleString(
               "en-us",
               {

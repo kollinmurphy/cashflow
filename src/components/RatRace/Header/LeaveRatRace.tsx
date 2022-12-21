@@ -4,17 +4,13 @@ import { Show } from "solid-js";
 import { createFireworks } from "../../../data/confetti";
 import { updateSheet } from "../../../data/firestore";
 import { sheetSignal } from "../../../data/signals";
-import {
-  calculateExpenses,
-  calculateMonthlyCashflow,
-  calculatePassiveIncome,
-} from "../../../data/utils";
+import { calculateExpenses, calculatePassiveIncome } from "../../../data/utils";
 
 export default function LeaveRatRace() {
   const [sheet, setSheet] = sheetSignal;
 
   const canLeaveRatRace = () => {
-    const income = calculateMonthlyCashflow(sheet());
+    const income = calculatePassiveIncome(sheet());
     const expenses = calculateExpenses(sheet());
     return income > expenses;
   };

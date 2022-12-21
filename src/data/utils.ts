@@ -36,7 +36,11 @@ export const calculatePassiveIncome = (sheet: Sheet | null) => {
     (acc, cur) => acc + cur.cashflow,
     0
   );
-  return assets;
+  const stockIncome = sheet.current.stocks["2BIG"]
+    ? sheet.current.stocks["2BIG"].cashflow *
+      sheet.current.stocks["2BIG"].shares
+    : 0;
+  return assets + stockIncome;
 };
 
 export const prettifyCamelCase = (str: string) =>

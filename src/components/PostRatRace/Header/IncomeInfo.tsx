@@ -18,11 +18,11 @@ export default function IncomeInfo() {
           currency: "USD",
         })}
       </div>
-      <div class="text-gray-400 text-sm">
+      <div class="text-green-600 text-sm">
         Monthly Cash Flow: $
         {cashflow().toLocaleString("en-us", { currency: "USD" })}
       </div>
-      <div class="text-gray-400 text-sm">
+      <div class="text-blue-500 text-sm">
         Goal Cashflow: $
         {goalCashflow().toLocaleString("en-us", {
           currency: "USD",

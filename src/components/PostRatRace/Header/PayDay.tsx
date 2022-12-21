@@ -1,5 +1,6 @@
 /* @jsxImportSource solid-js */
 
+import { Icon } from "@iconify-icon/solid";
 import { arrayUnion } from "firebase/firestore";
 import createConfetti from "../../../data/confetti";
 import { updateSheet } from "../../../data/firestore";
@@ -24,6 +25,7 @@ export default function PayDay() {
         });
       }}
     >
+      <Icon icon="material-symbols:attach-money-rounded" class="text-xl mr-1" />
       Pay Day
     </div>
   );

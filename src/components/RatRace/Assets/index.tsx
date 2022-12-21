@@ -7,13 +7,16 @@ import { v4 as uuid } from "uuid";
 import createConfetti from "../../../data/confetti";
 import { updateSheet } from "../../../data/firestore";
 import { sheetSignal } from "../../../data/signals";
-import type {
+import {
   Asset as AssetType,
   OtherAsset,
   RealEstateAsset,
+  StockAsset,
+  StockName,
 } from "../../../data/types";
 import ConditionalErrorAlert from "../../ConditionalErrorAlert";
 import Asset from "./Asset";
+import Stock from "./Stock";
 
 export default function Assets() {
   const [error, setError] = createSignal<string | null>(null);
@@ -21,23 +24,75 @@ export default function Assets() {
 
   const [sheet] = sheetSignal;
 
-  let nameRef!: HTMLInputElement;
+  const stocks = () => {
+    const stocks = sheet()?.current.stocks;
+    if (!stocks) return [];
+    const stockNames = Object.keys(stocks);
+    return stockNames
+      .filter((stock) => (stocks[stock as StockName]!.shares || 0) > 0)
+      .sort((a, b) => a.localeCompare(b));
+  };
+
+  const noAssets = () =>
+    stocks().length === 0 && (sheet()?.current?.assets?.length || 0) === 0;
+
+  let nameRef!: any;
   let cashflowRef!: HTMLInputElement;
   let costRef!: HTMLInputElement;
   let downpayRef!: HTMLInputElement;
+  let sharesRef: HTMLInputElement | undefined;
   let closeRef!: HTMLLabelElement;
 
   const resetForm = () => {
     setTimeout(() => {
+      if (nameRef) nameRef.value = "";
       if (costRef) costRef.value = "0";
-      cashflowRef.value = "0";
-      nameRef.value = "";
+      if (cashflowRef) cashflowRef.value = "0";
       if (downpayRef) downpayRef.value = "0";
+      if (sharesRef) sharesRef.value = "0";
       setType(null);
     }, 150);
   };
 
+  const handleAddStock = () => {
+    const previous = sheet()!.current.stocks[nameRef.value as StockName];
+    const previousShares = previous?.shares || 0;
+    const purchasingShares = parseInt(sharesRef?.value || "0");
+    if (!purchasingShares || purchasingShares < 0)
+      return setError("Invalid shares");
+    const totalShares = purchasingShares + previousShares;
+    const price = parseInt(costRef.value);
+    if (!price || price < 0) return setError("Invalid price");
+    const totalPrice = price * purchasingShares;
+    if (totalPrice > sheet()!.current.cash) return setError("Not enough cash");
+    const avgPrice =
+      ((previous?.cost || 0) + purchasingShares * price) / totalShares;
+    const asset: StockAsset = {
+      id: uuid(),
+      type: "stock",
+      name: nameRef.value,
+      stock: nameRef.value,
+      shares: totalShares,
+      avgPrice,
+      cashflow: nameRef.value === "2BIG" ? 10 : 0,
+      cost: totalPrice + (previous?.cost || 0),
+    };
+    updateSheet(sheet()!.id, {
+      "current.cash": sheet()!.current.cash - totalPrice,
+      ["current.stocks." + nameRef.value]: asset,
+      history: arrayUnion(
+        `${new Date().toISOString()}: Added ${purchasingShares} shares of ${
+          nameRef.value
+        } at $${price} each`
+      ),
+    });
+    closeRef.click();
+    if (asset.cashflow > 0)
+      createConfetti({ y: 0.5, x: 0.5, startVelocity: 40 });
+  };
+
   const handleAdd = () => {
+    if (type() === "stock") return handleAddStock();
     const cost = parseInt(costRef.value);
     const cash = sheet()!.current.cash;
     if (cost > cash && type() === "other")
@@ -81,7 +136,6 @@ export default function Assets() {
       ),
     });
     closeRef.click();
-    resetForm();
     if (parseInt(cashflowRef.value) > 0)
       createConfetti({ y: 0.5, x: 0.5, startVelocity: 40 });
   };
@@ -96,12 +150,17 @@ export default function Assets() {
         </label>
       </div>
       <div class="divider" />
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-        <For
-          each={sheet()?.current?.assets}
-          fallback={<span class="font-bold">No assets</span>}
-        >
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <Show when={noAssets()}>
+          <span class="font-bold">No assets</span>
+        </Show>
+        <For each={sheet()?.current?.assets}>
           {(asset) => <Asset asset={asset} />}
+        </For>
+        <For each={stocks()}>
+          {(stock) => (
+            <Stock stock={sheet()?.current?.stocks[stock as StockName]!} />
+          )}
         </For>
       </div>
       <input type="checkbox" id="add-asset-modal" class="modal-toggle" />
@@ -121,6 +180,16 @@ export default function Assets() {
                       class="text-xl mr-1"
                     />
                     Real Estate
+                  </button>
+                  <button
+                    class="btn btn-secondary"
+                    onClick={() => setType("stock")}
+                  >
+                    <Icon
+                      icon="material-symbols:show-chart-rounded"
+                      class="text-xl mr-1"
+                    />
+                    Stocks
                   </button>
                   <button
                     class="btn btn-secondary"
@@ -172,6 +241,30 @@ export default function Assets() {
                   class="input input-bordered"
                   ref={costRef}
                   value={0}
+                />
+              </Match>
+              <Match when={type() === "stock"}>
+                <span>Stock</span>
+                <select class="select select-bordered" ref={nameRef}>
+                  <option value="" disabled selected>
+                    Select a stock
+                  </option>
+                  <For each={Object.keys(StockName)}>
+                    {(name) => <option value={name}>{name}</option>}
+                  </For>
+                </select>
+                <span>Shares</span>
+                <input
+                  type="number"
+                  class="input input-bordered"
+                  ref={sharesRef}
+                />
+                <span>Price</span>
+                <input
+                  type="number"
+                  class="input input-bordered"
+                  ref={costRef}
+                  value={1}
                 />
               </Match>
             </Switch>

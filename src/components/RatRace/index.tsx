@@ -11,7 +11,6 @@ import PayDay from "./Header/PayDay";
 import PayMoney from "./Header/PayMoney";
 import TakeOutLoan from "./Header/TakeOutLoan";
 import Liabilities from "./Liabilities";
-import Stocks from "./Stocks";
 
 export default function RatRace() {
   return (
@@ -30,7 +29,6 @@ export default function RatRace() {
         </div>
       </div>
       <Assets />
-      <Stocks />
       <Liabilities />
       <Expenses />
       <EndGame />

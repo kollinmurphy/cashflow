@@ -23,7 +23,7 @@ export type Sheet = {
   history: any[];
 };
 
-export type Asset = RealEstateAsset | OtherAsset;
+export type Asset = RealEstateAsset | StockAsset | OtherAsset;
 
 export interface GenericAsset {
   id: string;
@@ -38,6 +38,13 @@ export interface RealEstateAsset extends GenericAsset {
   downPayment: number;
 }
 
+export interface StockAsset extends GenericAsset {
+  type: "stock";
+  stock: StockName;
+  shares: number;
+  avgPrice: number;
+}
+
 export interface OtherAsset extends GenericAsset {
   type: "other";
 }
@@ -46,13 +53,8 @@ export enum StockName {
   ON2U = "ON2U",
   MYT4U = "MYT4U",
   OK4U = "OK4U",
+  "2BIG" = "2BIG",
 }
-
-export type StockAsset = {
-  name: StockName;
-  shares: number;
-  avgPrice: number;
-};
 
 export interface Expenses extends Liabilities {
   taxes: number;

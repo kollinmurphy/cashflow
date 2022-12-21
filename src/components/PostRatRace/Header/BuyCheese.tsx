@@ -1,3 +1,4 @@
+import { Icon } from "@iconify-icon/solid";
 import { updateSheet } from "../../../data/firestore";
 import { sheetSignal } from "../../../data/signals";
 
@@ -12,7 +13,7 @@ export default function BuyCheese() {
 
   return (
     <div class="btn btn-secondary btn-outline" onClick={handleClick}>
-      I Bought My Cheese
+      <Icon icon="bxs:cheese" class="text-xl mr-1" />I Bought My Cheese
     </div>
   );
 }

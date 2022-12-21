@@ -9,11 +9,11 @@ export default function Asset(props: { asset: Asset }) {
     <div class="flex flex-row justify-between items-center p-3 bg-white rounded-lg shadow-lg">
       <div class="flex flex-col">
         <span class="font-bold">{props.asset.name}</span>
-        <span class="text-gray-400">${props.asset.cashflow}</span>
+        <span class="text-green-600">${props.asset.cashflow}</span>
       </div>
       <div class="flex flex-row gap-2">
         <button
-          class="btn btn-primary btn-outline"
+          class="btn btn-secondary btn-outline btn-sm"
           onClick={() => {
             updateSheet(sheet()!.id, {
               "current.assets": sheet()!.current.assets.filter(

@@ -1,5 +1,6 @@
 /* @jsxImportSource solid-js */
 
+import { Icon } from "@iconify-icon/solid";
 import { arrayUnion } from "firebase/firestore";
 import { createSignal, For } from "solid-js";
 import { v4 as uuid } from "uuid";
@@ -62,11 +63,12 @@ export default function PostRatRaceAssets() {
       <div class="flex flex-row justify-between items-center">
         <h3 class="text-2xl font-bold">Assets</h3>
         <label class="btn btn-primary" for="add-asset-modal">
-          Add Asset
+          <Icon icon="material-symbols:add" class="text-xl mr-1" />
+          Add
         </label>
       </div>
       <div class="divider" />
-      <div class="flex flex-col">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         <For
           each={sheet()?.current?.postRatRace.assets}
           fallback={

@@ -1,5 +1,6 @@
 /* @jsxImportSource solid-js */
 
+import { Icon } from "@iconify-icon/solid";
 import { createSignal } from "solid-js";
 import { updateSheet } from "../../../data/firestore";
 import { sheetSignal } from "../../../data/signals";
@@ -37,6 +38,7 @@ export default function AddMoney() {
         for="add-money-modal-post-rat-race"
         class="btn btn-success btn-outline"
       >
+        <Icon icon="material-symbols:add" class="text-xl mr-1" />
         Add Money
       </label>
       <input

@@ -9,17 +9,6 @@ import type { Asset, RealEstateAsset } from "../../../data/types";
 export default function Asset(props: { asset: Asset }) {
   const [sheet] = sheetSignal;
 
-  const handleRemove = () => {
-    updateSheet(sheet()!.id, {
-      "current.assets": sheet()!.current.assets.filter(
-        (a: Asset) => a.id !== props.asset.id
-      ),
-      history: arrayUnion(
-        `${new Date().toISOString()}: Removed asset ${props.asset.name}`
-      ),
-    });
-  };
-
   const modalId = () => `sell-asset-modal-${props.asset.id}`;
 
   let amountRef!: HTMLInputElement;
@@ -41,6 +30,8 @@ export default function Asset(props: { asset: Asset }) {
           return amount;
         case "realEstate":
           return amount - props.asset.mortgage;
+        default:
+          return 0;
       }
     })();
 
@@ -60,8 +51,14 @@ export default function Asset(props: { asset: Asset }) {
     <div class="flex flex-row justify-between items-center p-4 bg-white shadow-lg rounded-lg">
       <div class="flex flex-col gap-1">
         <span class="font-bold">{props.asset.name}</span>
-        <span class="text-green-600">
-          Cashflow: ${props.asset.cashflow.toLocaleString("en-us", { currency: "USD" })}
+        <span
+          class="text-green-600"
+          classList={{
+            "text-red-400": props.asset.cashflow <= 0,
+          }}
+        >
+          Cashflow: $
+          {props.asset.cashflow.toLocaleString("en-us", { currency: "USD" })}
         </span>
         <Show when={props.asset.type === "realEstate"}>
           <span class="text-red-400">
@@ -73,15 +70,9 @@ export default function Asset(props: { asset: Asset }) {
         </Show>
       </div>
       <div class="flex flex-col md:flex-row gap-2">
-        <label class="btn btn-primary btn-outline btn-sm" for={modalId()}>
+        <label class="btn btn-success btn-outline btn-sm" for={modalId()}>
           Sell
         </label>
-        <button
-          class="btn btn-secondary btn-outline btn-sm"
-          onClick={handleRemove}
-        >
-          Remove
-        </button>
       </div>
       <input type="checkbox" id={modalId()} class="modal-toggle" />
       <div class="modal">

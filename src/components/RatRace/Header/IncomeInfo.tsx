@@ -48,9 +48,9 @@ export default function IncomeInfo() {
         Monthly Cash Flow: $
         {cashflow().toLocaleString("en-us", { currency: "USD" })}
       </div>
-      <div>
+      {/* <div>
         id: {sheet()?.id}
-      </div>
+      </div> */}
     </div>
   );
 }

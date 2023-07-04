@@ -8,7 +8,7 @@ export const calculateMonthlyCashflow = (sheet: Sheet | null) => {
   return Math.round(assets + sheet.profession.income.salary - expenses);
 };
 
-export const calculatePostRatRaceMonthlyCashflow = (sheet: Sheet | null) => {
+export const calculateFastTrackMonthlyCashflow = (sheet: Sheet | null) => {
   if (!sheet) return 0;
   const initial = sheet.current.postRatRace.startingIncome;
   const assets = sheet.current.postRatRace.assets.reduce(

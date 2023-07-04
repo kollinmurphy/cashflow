@@ -1,12 +1,12 @@
 /* @jsxImportSource solid-js */
 
 import { sheetSignal } from "../../../data/signals";
-import { calculatePostRatRaceMonthlyCashflow } from "../../../data/utils";
+import { calculateFastTrackMonthlyCashflow } from "../../../data/utils";
 
 export default function IncomeInfo() {
   const [sheet] = sheetSignal;
 
-  const cashflow = () => calculatePostRatRaceMonthlyCashflow(sheet());
+  const cashflow = () => calculateFastTrackMonthlyCashflow(sheet());
   const goalCashflow = () =>
     (sheet()?.current.postRatRace.startingIncome || 0) + 50_000;
 

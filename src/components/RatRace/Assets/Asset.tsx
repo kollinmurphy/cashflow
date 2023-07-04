@@ -1,35 +1,32 @@
 /* @jsxImportSource solid-js */
 
 import { arrayRemove, arrayUnion } from "firebase/firestore";
-import { Show } from "solid-js";
+import { createSignal, Show } from "solid-js";
 import { updateSheet } from "../../../data/firestore";
 import { sheetSignal } from "../../../data/signals";
-import type { Asset, RealEstateAsset } from "../../../data/types";
+import type { Asset, RatRaceAsset } from "../../../data/types";
 
 export default function Asset(props: { asset: Asset }) {
   const [sheet] = sheetSignal;
+  const [amount, setAmount] = createSignal(0);
 
   const modalId = () => `sell-asset-modal-${props.asset.id}`;
 
-  let amountRef!: HTMLInputElement;
   let closeRef!: HTMLLabelElement;
 
   const resetForm = () => {
     setTimeout(() => {
-      amountRef.value = "0";
+      setAmount(0);
     }, 150);
   };
 
   const handleSell = () => {
-    const amount = parseInt(amountRef.value);
     const cash = sheet()!.current.cash;
 
     const income = (() => {
       switch (props.asset.type) {
         case "other":
-          return amount;
-        case "realEstate":
-          return amount - props.asset.mortgage;
+          return amount() - props.asset.mortgage;
         default:
           return 0;
       }
@@ -39,9 +36,9 @@ export default function Asset(props: { asset: Asset }) {
       "current.cash": cash + income,
       "current.assets": arrayRemove(props.asset),
       history: arrayUnion(
-        `${new Date().toISOString()}: Sold asset ${props.asset.name} for $${
-          amountRef.value
-        }`
+        `${new Date().toISOString()}: Sold asset ${
+          props.asset.name
+        } for $${amount()}`
       ),
     });
     closeRef.click();
@@ -60,10 +57,10 @@ export default function Asset(props: { asset: Asset }) {
           Cashflow: $
           {props.asset.cashflow.toLocaleString("en-us", { currency: "USD" })}
         </span>
-        <Show when={props.asset.type === "realEstate"}>
+        <Show when={props.asset.type === "other"}>
           <span class="text-red-400">
             Mortgage: $
-            {(props.asset as RealEstateAsset).mortgage.toLocaleString("en-us", {
+            {(props.asset as RatRaceAsset).mortgage.toLocaleString("en-us", {
               currency: "USD",
             })}
           </span>
@@ -77,14 +74,14 @@ export default function Asset(props: { asset: Asset }) {
       <input type="checkbox" id={modalId()} class="modal-toggle" />
       <div class="modal">
         <div class="modal-box">
-          <h3 class="font-bold text-lg mb-4">Add New Asset</h3>
+          <h3 class="font-bold text-lg mb-4">Sell Asset</h3>
           <div class="flex flex-col gap-2">
             <span>Amount</span>
             <input
               type="number"
               class="input input-bordered focus:outline-none focus:ring-2"
-              ref={amountRef}
-              value={0}
+              onChange={(e) => setAmount(parseInt(e.currentTarget.value))}
+              value={amount()}
             />
           </div>
           <div class="modal-action">

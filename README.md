@@ -8,5 +8,4 @@
 - Maybe add down payment to other asset
 - Buy Big Screen TV Doodad
 - Icons on asset
-- Real estate Mortgage label is wrong
 - Tax Audit / Divorce on Fast Track

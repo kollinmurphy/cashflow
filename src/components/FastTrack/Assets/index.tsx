@@ -6,7 +6,7 @@ import { createSignal, For } from "solid-js";
 import { v4 as uuid } from "uuid";
 import { updateSheet } from "../../../data/firestore";
 import { sheetSignal } from "../../../data/signals";
-import type { OtherAsset } from "../../../data/types";
+import type { FastTrackAsset } from "../../../data/types";
 import ConditionalErrorAlert from "../../ConditionalErrorAlert";
 import Asset from "./Asset";
 
@@ -48,7 +48,8 @@ export default function PostRatRaceAssets() {
         type: "other",
         name: nameRef.value,
         cashflow: Number(cashflowRef.value),
-      } as OtherAsset),
+        cost,
+      } satisfies FastTrackAsset),
       history: arrayUnion(
         `${new Date().toISOString()}: Bought big asset ${nameRef.value} for $${
           costRef.value
@@ -88,7 +89,10 @@ export default function PostRatRaceAssets() {
           <h3 class="font-bold text-lg mb-4">Add New Asset</h3>
           <div class="flex flex-col gap-2">
             <span>Name</span>
-            <input class="input input-bordered focus:outline-none focus:ring-2" ref={nameRef} />
+            <input
+              class="input input-bordered focus:outline-none focus:ring-2"
+              ref={nameRef}
+            />
             <span>Monthly Cashflow</span>
             <input
               type="number"

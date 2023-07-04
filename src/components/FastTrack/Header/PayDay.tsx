@@ -5,12 +5,12 @@ import { arrayUnion } from "firebase/firestore";
 import createConfetti from "../../../data/confetti";
 import { updateSheet } from "../../../data/firestore";
 import { sheetSignal } from "../../../data/signals";
-import { calculatePostRatRaceMonthlyCashflow } from "../../../data/utils";
+import { calculateFastTrackMonthlyCashflow } from "../../../data/utils";
 
 export default function PayDay() {
   const [sheet] = sheetSignal;
 
-  const cashflow = () => calculatePostRatRaceMonthlyCashflow(sheet());
+  const cashflow = () => calculateFastTrackMonthlyCashflow(sheet());
   return (
     <div
       class="btn btn-success hover:scale-105"

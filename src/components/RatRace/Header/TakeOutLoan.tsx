@@ -9,29 +9,28 @@ import ConditionalErrorAlert from "../../ConditionalErrorAlert";
 
 export default function TakeOutLoan() {
   const [sheet] = sheetSignal;
-  const [error, setError] = createSignal("");
+  const [amount, setAmount] = createSignal(0);
 
-  let amountRef!: HTMLInputElement;
   let closeRef!: HTMLLabelElement;
 
   const handleTakeLoan = () => {
-    const amount = parseInt(amountRef.value);
-    if (!amount || amount < 0)
-      return setError("Please enter a valid amount to add.");
-    if (amount % 1000 !== 0)
-      return setError("Amount must be a multiple of $1000.");
     const cash = sheet()?.current.cash || 0;
     const loans = sheet()?.current.loans || 0;
     updateSheet(sheet()!.id, {
-      "current.cash": cash + amount,
-      "current.loans": loans + amount,
-      history: arrayUnion(`Took out a loan of $${amount} from the bank.`),
+      "current.cash": cash + amount(),
+      "current.loans": loans + amount(),
+      history: arrayUnion(`Took out a loan of $${amount()} from the bank.`),
     });
     closeRef.click();
     setTimeout(() => {
-      amountRef.value = "0";
+      setAmount(0);
     }, 150);
   };
+
+  const error = () =>
+    amount() <= 0 || Number.isNaN(amount()) || amount() % 1000 !== 0
+      ? "Amount must be a multiple of $1000."
+      : "";
 
   return (
     <>
@@ -51,8 +50,8 @@ export default function TakeOutLoan() {
             <input
               type="number"
               class="input input-bordered focus:outline-none focus:ring-2"
-              ref={amountRef}
-              value={0}
+              value={amount()}
+              onInput={(e) => setAmount(parseInt(e.currentTarget.value))}
             />
             <ConditionalErrorAlert error={error()} />
           </div>
@@ -64,9 +63,13 @@ export default function TakeOutLoan() {
             >
               Cancel
             </label>
-            <div class="btn btn-primary" onClick={handleTakeLoan}>
+            <button
+              class="btn btn-primary"
+              onClick={handleTakeLoan}
+              disabled={Boolean(error())}
+            >
               Take Loan
-            </div>
+            </button>
           </div>
         </div>
       </div>

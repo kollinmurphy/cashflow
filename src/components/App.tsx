@@ -5,7 +5,7 @@ import { signOut } from "../data/auth";
 import { createSheet, findSheet, listenToSheet } from "../data/firestore";
 import { sheetSignal, userSignal } from "../data/signals";
 import ChooseProfession from "./ChooseProfession";
-import PostRatRace from "./PostRatRace";
+import FastTrack from "./FastTrack";
 import RatRace from "./RatRace";
 
 export default function App() {
@@ -43,7 +43,7 @@ export default function App() {
         </div>
       }
     >
-      <Show when={!sheet()?.current.leftRatRace} fallback={<PostRatRace />}>
+      <Show when={!sheet()?.current.leftRatRace} fallback={<FastTrack />}>
         <RatRace />
       </Show>
     </Show>

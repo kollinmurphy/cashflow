@@ -3,7 +3,7 @@
 import { createEffect, Show } from "solid-js";
 import { updateSheet } from "../../data/firestore";
 import { sheetSignal } from "../../data/signals";
-import { calculatePostRatRaceMonthlyCashflow } from "../../data/utils";
+import { calculateFastTrackMonthlyCashflow } from "../../data/utils";
 import EndGame from "../EndGame";
 import Profession from "../Profession";
 import Assets from "./Assets";
@@ -14,12 +14,12 @@ import PayDay from "./Header/PayDay";
 import PayMoney from "./Header/PayMoney";
 import WonGame from "./WonGame";
 
-export default function PostRatRace() {
-  const [sheet, setSheet] = sheetSignal;
+export default function FastTrack() {
+  const [sheet] = sheetSignal;
 
   const won = () => sheet()?.current.postRatRace.won;
 
-  const cashflow = () => calculatePostRatRaceMonthlyCashflow(sheet());
+  const cashflow = () => calculateFastTrackMonthlyCashflow(sheet());
   const goalCashflow = () =>
     (sheet()?.current.postRatRace.startingIncome || 0) + 50_000;
 

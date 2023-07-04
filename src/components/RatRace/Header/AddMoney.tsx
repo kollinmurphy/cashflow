@@ -1,16 +1,14 @@
 /* @jsxImportSource solid-js */
 
+import { Icon } from "@iconify-icon/solid";
 import { createSignal } from "solid-js";
 import { updateSheet } from "../../../data/firestore";
 import { sheetSignal } from "../../../data/signals";
-import ConditionalErrorAlert from "../../ConditionalErrorAlert";
-import {Icon} from '@iconify-icon/solid'
 
 export default function AddMoney() {
   const [sheet] = sheetSignal;
-  const [error, setError] = createSignal("");
+  const [amount, setAmount] = createSignal(0);
 
-  let amountRef!: HTMLInputElement;
   let closeRef!: HTMLLabelElement;
 
   return (
@@ -19,7 +17,7 @@ export default function AddMoney() {
         for="add-money-modal"
         class="btn btn-success btn-outline w-full md:w-auto"
       >
-        <Icon icon='material-symbols:add' class='text-xl mr-1' />
+        <Icon icon="material-symbols:add" class="text-xl mr-1" />
         Add Money
       </label>
       <input type="checkbox" id="add-money-modal" class="modal-toggle" />
@@ -31,10 +29,9 @@ export default function AddMoney() {
             <input
               type="number"
               class="input input-bordered focus:outline-none focus:ring-2"
-              ref={amountRef}
-              value={0}
+              value={amount()}
+              onInput={(e) => setAmount(parseInt(e.currentTarget.value))}
             />
-            <ConditionalErrorAlert error={error()} />
           </div>
           <div class="modal-action">
             <label
@@ -44,21 +41,20 @@ export default function AddMoney() {
             >
               Cancel
             </label>
-            <div
+            <button
               class="btn btn-primary"
+              disabled={amount() <= 0 || Number.isNaN(amount())}
               onClick={() => {
-                const amount = parseInt(amountRef.value);
-                if (!amount || amount < 0)
-                  return setError("Please enter a valid amount to add.");
                 const cash = sheet()!.current.cash;
                 updateSheet(sheet()!.id, {
-                  "current.cash": cash + amount,
+                  "current.cash": cash + amount(),
                 });
                 closeRef.click();
+                setAmount(0);
               }}
             >
               Add
-            </div>
+            </button>
           </div>
         </div>
       </div>

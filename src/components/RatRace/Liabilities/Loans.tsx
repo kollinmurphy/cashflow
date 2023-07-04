@@ -7,39 +7,32 @@ import ConditionalErrorAlert from "../../ConditionalErrorAlert";
 
 export const Loans = () => {
   const [sheet] = sheetSignal;
-  const [error, setError] = createSignal("");
+  const [amount, setAmount] = createSignal(0);
 
-  let amountRef!: HTMLInputElement;
   let closeRef!: HTMLLabelElement;
 
-  const resetForm = () => {
-    setTimeout(() => {
-      amountRef.value = "0";
-    }, 150);
-  };
+  const resetForm = () => setAmount(0);
 
   const handlePayOff = () => {
-    const amount = parseInt(amountRef.value);
-    if (!amount || amount < 0)
-      return setError("Please enter a valid amount to pay.");
-    if (amount % 1000 !== 0)
-      return setError("Amount must be a multiple of $1000.");
+    const a = amount();
     const cash = sheet()!.current.cash;
-    if (amount > cash)
-      return setError(
-        "You can't pay more than you have in cash. Please pay less."
-      );
-    const loanAmount = sheet()!.current.loans;
-    if (amount > loanAmount)
-      return setError(
-        "You can't pay more than you have in loans. Please pay less."
-      );
     updateSheet(sheet()!.id, {
-      "current.cash": cash - amount,
-      "current.loans": (sheet()!.current.loans || 0) - amount,
+      "current.cash": cash - a,
+      "current.loans": (sheet()!.current.loans || 0) - a,
     });
     closeRef.click();
   };
+
+  const disabled = () => Boolean(error());
+
+  const error = () =>
+    amount() > sheet()!.current.cash
+      ? "You can't pay more than you have in cash."
+      : amount() > sheet()!.current.loans
+      ? "You can't pay more than you have in loans."
+      : !amount() || amount() < 0 || amount() % 1000 !== 0
+      ? "Amount must be a multiple of $1000."
+      : "";
 
   return (
     <div class="flex flex-row justify-between items-center p-3 bg-white rounded-lg shadow-lg">
@@ -67,8 +60,8 @@ export const Loans = () => {
             <input
               type="number"
               class="input input-bordered focus:outline-none focus:ring-2"
-              ref={amountRef}
-              value={0}
+              value={amount()}
+              onInput={(e) => setAmount(parseInt(e.currentTarget.value))}
             />
             <ConditionalErrorAlert error={error()} />
           </div>
@@ -81,9 +74,13 @@ export const Loans = () => {
             >
               Cancel
             </label>
-            <div class="btn btn-primary" onClick={handlePayOff}>
+            <button
+              class="btn btn-primary"
+              onClick={handlePayOff}
+              disabled={disabled()}
+            >
               Pay Off
-            </div>
+            </button>
           </div>
         </div>
       </div>

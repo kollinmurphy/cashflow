@@ -4,33 +4,23 @@ import { Icon } from "@iconify-icon/solid";
 import { createSignal } from "solid-js";
 import { updateSheet } from "../../../data/firestore";
 import { sheetSignal } from "../../../data/signals";
-import ConditionalErrorAlert from "../../ConditionalErrorAlert";
 
 export default function PayMoney() {
   const [sheet] = sheetSignal;
-  const [error, setError] = createSignal("");
+  const [amount, setAmount] = createSignal(0);
 
-  let amountRef!: HTMLInputElement;
   let closeRef!: HTMLLabelElement;
 
   const resetForm = () => {
     setTimeout(() => {
-      amountRef.value = "0";
-      setError("");
+      setAmount(0);
     }, 150);
   };
 
   const handlePay = () => {
-    const amount = parseInt(amountRef.value);
-    if (!amount || amount < 0)
-      return setError("Please enter a valid amount to pay.");
     const cash = sheet()!.current.cash;
-    if (amount > cash)
-      return setError(
-        "You can't pay more than you have in cash. Please pay less."
-      );
     updateSheet(sheet()!.id, {
-      "current.cash": cash - amount,
+      "current.cash": cash - amount(),
     });
     closeRef.click();
     resetForm();
@@ -54,10 +44,9 @@ export default function PayMoney() {
             <input
               type="number"
               class="input input-bordered focus:outline-none focus:ring-2"
-              ref={amountRef}
-              value={0}
+              value={amount()}
+              onInput={(e) => setAmount(parseInt(e.currentTarget.value))}
             />
-            <ConditionalErrorAlert error={error()} />
           </div>
           <div class="modal-action">
             <label
@@ -68,9 +57,17 @@ export default function PayMoney() {
             >
               Cancel
             </label>
-            <div class="btn btn-primary" onClick={handlePay}>
+            <button
+              class="btn btn-primary"
+              onClick={handlePay}
+              disabled={
+                amount() <= 0 ||
+                Number.isNaN(amount()) ||
+                amount() > sheet()!.current.cash
+              }
+            >
               Pay
-            </div>
+            </button>
           </div>
         </div>
       </div>

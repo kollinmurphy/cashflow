@@ -5,6 +5,7 @@ import Profession from "../Profession";
 import Assets from "./Assets";
 import Expenses from "./Expenses";
 import AddMoney from "./Header/AddMoney";
+import Charity from "./Header/Charity";
 import Downsize from "./Header/Downsize";
 import IncomeInfo from "./Header/IncomeInfo";
 import LeaveRatRace from "./Header/LeaveRatRace";
@@ -24,6 +25,7 @@ export default function RatRace() {
         <div class="flex flex-col md:flex-row flex-wrap gap-2 items-center md:items-end">
           <AddMoney />
           <PayMoney />
+          <Charity />
           <Downsize />
           <TakeOutLoan />
           <PayDay />
